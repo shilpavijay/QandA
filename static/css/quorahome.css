@@ -44,8 +44,8 @@ body {
 .selector {
     position: relative;
     width: 80.5%;
-    color: #585a61;
-    background-color: #eee;
+    /*color: #585a61;*/
+    /*background-color: #eee;*/
     height: 29px;
 }
 

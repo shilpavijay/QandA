@@ -17,82 +17,70 @@
 // } 
 
 function search() {
-  $("#search_string").keyup(function() {
+  $("select").change(function() {
       var filter = $(this).val();
-      $("h4").each(function() {
-          debugger
-          var s = $(this).text().toLowerCase();
-          debugger
+      $("h4").each(function() {         
+          var s = $(this).text().toLowerCase();         
           if ($(this).text().search(new RegExp(filter, "i")) < 0) {
                 $(this).fadeOut();
-            // Need to revisit the fadeOut() after impl feed(): should be $(this).parent().fadeOut()
+
+              // Need to revisit the fadeOut() after impl feed(): should be $(this).parent().fadeOut()
             } else {
                 $(this).show();
-            }
-          debugger
+
+            }         
     });
   });
 }
 
 
 function feed() {
-
-      // var _ = require('lodash');
-      // var a = _.lowerCase('<--Foo-Bar-></--Foo-Bar->-');
-      // $(".qa").append(a);
+  
+  var start = _.template('<div class="qna">')
+  var feed_q = _.template('<h4> <%= q %> </h4><br/> <a class="usrnm">' + 'username' +'</a><br/>');
+  var feed_ans = _.template('<br/><p class="answers"><%= a %> </p><br/>');
+  var vote_bar = _.template('<div class="ActionBar"><a class="upvote"><span>Upvote | </span><span><%= v %></span></a><a class="downvote">Downvote</a><a class="downvote">Comments</a><br/></div><br/>');
+  var add_list = _.template('<option> <%= ques %> </option>');
   $.get("/feed/",function(data){
     json = JSON.parse(data);
-    $.each(json, function(question,answers){
-      $(".qa").append("<h4>" + question +"</h4>");
-      $(".qa").append("<br/>");
-      $(".qa").append('<a class="usrnm">' + 'username' +'</a>');
-      $(".qa").append('<br/>');
+    $(".qa").append(start);
 
+    $.each(json, function(question,answers){     
+      $(".qna").append(feed_q({ 'q': question }));
+      $(".selector").append(add_list({ 'ques': question }));     
       $.each(answers,function(ans,vote){    
-          $(".qa").append('<br/>');  
-          $(".qa").append("<p>" + ans +"</p>");
-          // $(".qa").append('<div class="ActionBar">' + '</div>');
-          // $(".ActionBar").append('<a class="vote">'+'</a>');
-          // $(".vote").append('<span>' + 'Upvote |' + '</span>');
-          $(".qa").append('<span>'+ vote + '</span>');
-          $(".qa").append('<br/>');
-          // $(this).find(".qa").addClass("ActionBar");
-          // $(this).find('.vote').addClass('upvote');
-
-      });
+          $(".qna").append(feed_ans({ 'a' : ans }));
+          $(".qna").append(vote_bar({ 'v': vote }));
+      });    
+      $(".qna").append('</div>');
     });
-
-
   });  
-
-  $("body").bind("DOMNodeInserted", function() {
-   $(this).find('.vote').addClass('upvote');
-   // $(this).find('.qa').append('<div class="AB">' + '</div>');
-   // $(this).find('.AB').append('<a class="vote">'+'</a>');
-   // $(this).find('.vote').append('<span>' + 'Upvote |' + '</span>');
-});
-
   return true;
 }
 
 
 $("document").ready(function(){
+  
+  if ($(".js-example-basic-single").length > 0){
+     $(".js-example-basic-single").select2({
+        placeholder: "Ask or Search Quora",
+        allowClear: true
+     });
+    }
+
   feed();
 
-  //blur body when focus is on the search field
-  $("#search_string").focusin(function(){ 
+  // blur body when focus is on the search field
+  $(".selector").focusin(function(){ 
       $("#bdy").fadeTo(5, 0.4);
     } 
   ); 
-  $("#search_string").focusout(function(){ 
+  $(".selector").focusout(function(){ 
       $("#bdy").fadeTo(10, 1);
     } 
-        // function () { $("#bdy").fadeTo("normal",1); }
     );
-
-    // $(".searchlist").select2();
     
-    search();
+  search();
 
 
   // search($(".rowsize"), $(".qa"));

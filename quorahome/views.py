@@ -11,6 +11,11 @@ import json
 
 # Create your views here.
 def mainpg(request):
+	if request.method == 'POST' and request.is_ajax:
+		answer = request.POST.get("ans",False)
+		obj=Answer.objects.filter(ans__startswith=answer)[0]
+		incr = obj.upvote + 1
+		Answer.objects.filter(ans=answer).update(upvote=incr)
 	return render_to_response('quora.html', context_instance=RequestContext(request))
 
 # def feed(request):
@@ -45,12 +50,10 @@ def feed(request):
 	ansO = Answer.objects.order_by('-upvote')
 	for a in ansO:
 		q = Question.objects.get(qion = a.qion.qion)
-		print q.qion, a.ans, a.upvote
 		if q.qion not in qanda.keys():
 			qanda[q.qion]={a.ans:a.upvote}
 		else:
 			qanda[q.qion].update({a.ans:a.upvote})
-	print qanda	
 	return HttpResponse(json.dumps(OrderedDict(qanda.items())))
 
 
@@ -70,6 +73,7 @@ def foll_users(request):
 				temp[d] = d
 	print temp
 	return HttpResponse(serializers.serialize('json',temp))
+	
 
 @csrf_exempt
 # @login_required(login_url='/')
