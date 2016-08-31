@@ -1,0 +1,167 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Home - Quora</title>
+        <meta name="description" content="">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+        <!-- <link rel="stylesheet" href="./css/quorahome.css">  -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.15.0/lodash.js"></script>
+
+		{% load staticfiles %}
+		<link rel="stylesheet" href="{% static "css/quorahome.css" %}">
+		<script src="{% static "js/jquery.min.js" %}"></script>
+		<script src="{% static "js/mainjq.js" %}"></script>	
+		
+    </head>
+    <body>
+    <hr class="hozfrst" color="#b92b27">
+	<div class="container">
+      <div class="rowsize" >
+         <div class="col-md-1">
+         	<p class="title"> Quora </p>
+         </div>
+      	 <div class="col-md-5">
+      	 	<div class="ask_bar">
+      	 		<textarea id="search_string" class="selector" type="text" rows="1" placeholder="Ask or Search Quora"></textarea> 
+      	 		<a class="AskButton" href="#"><div>Ask Question</div></a>	
+      	 		<!-- <button type="button"> Ask Questions</button> -->
+      	 		<!-- <button class="AskButton" type="submit">Ask Question</button> -->
+      	 	</div>
+         </div>
+         <a class="imgtag" href="#">
+         <div class="col-md-1">
+         <img class="image" src="{% static "img/readfile.png" %}">Read
+         </div></a>
+         <a class="imgtag" href="#">
+         <div class="col-md-11">
+         <img class="image" src="{% static "img/pencil.png" %}">Answer
+         </div></a>
+         <a class="imgtag" href="#">
+         <div class="col-md-12">
+         <img class="image" src="{% static "img/bell1.png" %}">Notifications
+         </div></a>
+         <a class="imgtag" href="#">
+         <div class="col-md-2">
+         <img class="image" src="{% static "img/batman2.png" %}">Batman
+         </div></a>
+      </div> 
+	<hr class="hozline" color="#ddd">
+	  <!-- <div>	 -->
+	     <div id="bdy" class="rowsize">
+		     <div class="col-md-2">
+			     <div class="ActionBarFeed">
+		     		<span class="subtitle1">Feeds</span>
+		     		<span><a class="feededit">Edit</a>
+			     </div>
+
+			     <div class="info1">Top stories</div>
+			     <ul><li class="feedlist"><a href="#">Philosophy</a></li></ul>
+			     <ul><li class="feedlist"><a href="#">Technology</a></li></ul>
+			     <ul><li class="feedlist"><a href="#">Travel</a></li></ul>
+			     <ul><li class="feedlist"><a href="#">Education</a></li></ul>
+			     <ul><li class="feedlist"><a href="#">Programming</a></li></ul>
+
+				<br>
+				<br>
+				<img class="image1" src="{% static "img/arrow.png" %}">
+			     <span class="ActionBarFeed">Trending Now</span>
+			     <div class="info1">Top listings</div>
+			     <ul><li class="feedlist"><a href="#">Strange things</a></li></ul>
+			     <ul><li class="feedlist"><a href="#">P.V Sindhu wins Silver</a></li></ul>
+			     <ul><li class="feedlist"><a href="#">Olympics @ Rio</a></li></ul>
+			     <ul><li class="feedlist"><a href="#">Rustom</a></li></ul>
+			 </div>
+
+
+
+
+		  	 <div class="col-md-6">
+		  	 <div class="subtitle">Top Stories for you</div>
+
+		  	 <div class="qa">
+		  	 </div>
+		  	 <!-- <div class="contenthead">Answer written . Fantasy . 2016</div>			  -->
+		  	 	<h4>Why do we deserve a superhero?</h4>
+		  	 	<a class="info" href="#" color="#333"><img class="image" src="{% static "img/batman2.png" %}">Batman</a>
+		     	<p class="answers" text-align="justify"> 
+			<!-- 	<%= yield %>
+  				<%= partial "footer" %> -->
+		     	Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laborum sint natus reiciendis harum. Mod reiciendis consequatur aspernatur porro quod laborum sit, ipsa tempore. Illo totam quisquam velit esse quia placeat. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iste non quod ab voluptate vel nihil praesentium aperiam fugiat esse, eveniet quibusdam repellat illum. Aliquid qui nisi eum, facilis quos repellendus. </p>
+		     	<a>(more)</a>
+
+		     	<div class="ActionBar">
+			     		<a class="upvote">
+			     			<span>Upvote | </span>
+			     			<span>20K</span>
+			     		</a>
+			     		<a class="downvote">Downvote</a>
+			     		<a class="downvote">Comments</a>
+		     	</div>
+
+				<div class="subtitle"></div>
+
+
+				<div class="contenthead">Answer written . Fantasy . 2016</div>			 
+		  	 	<h4>What does 'S' stand for?</h4>
+		  	 	<a class="info" href="#" color="#333"><img class="image" src="{% static "img/superman.png" %}">Superman</a>
+		     	<p  class="answers" text-align="justify"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laborum sint natus reiciendis harum. Mod reiciendis consequatur aspernatur porro quod laborum sit, ipsa tempore. Illo totam quisquam velit esse quia placeat. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iste non quod ab voluptate vel nihil praesentium aperiam fugiat esse, eveniet quibusdam repellat illum. Aliquid qui nisi eum, facilis quos repellendus.</p>
+
+		     	<div class="ActionBar">
+			     		<a class="upvote">
+			     			<span>Upvote | </span>
+			     			<span>10K</span>
+			     		</a>
+			     		<a class="downvote">Downvote</a>
+			     		<a class="downvote">Comments</a>
+		     	</div>
+				<div class="subtitle"></div>
+
+				<div class="contenthead">Answer written . Technology . 2016</div>			 
+		  	 	<h4>Where is Krypton?</h4>
+		  	 	<a class="info" href="#" color="#333"><img class="image" src="{% static "img/superman.png" %}">Superman</a>
+		     	<p class="answers" text-align="justify"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laborum sint natus reiciendis harum. Mod reiciendis consequatur aspernatur porro quod laborum sit, ipsa tempore. Illo totam quisquam velit esse quia placeat. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iste non quod ab voluptate vel nihil praesentium aperiam fugiat esse, eveniet quibusdam repellat illum. Aliquid qui nisi eum, facilis quos repellendus.</p>
+
+		     	<div class="ActionBar">
+			     		<a class="upvote">
+			     			<span>Upvote | </span>
+			     			<span>21.1K</span>
+			     		</a>
+			     		<a class="downvote">Downvote</a>
+			     		<a class="downvote">Comments</a>
+		     	</div>
+				<div class="subtitle"></div>
+
+		     </div>
+			
+
+		     <div class="col-md-2">
+		     	<div class="test">
+		     	</div>
+		     	<!-- <div class="ActionBarFeed">
+		     		<span class="subtitle">Endorse</span>
+		     		<span><a class="feededit">Next</a>
+			     </div>
+			    <div class="sidebar">
+			    <img class="image" src="{% static "img/hulk.jpg" %}"> What topic would <a href="#" font-color="#eee">Hulk</a> know about?
+				</div>
+
+				<input class="selector_side" placeholder="Select Topic"></input> -->
+		     	
+		     </div>
+	     </div>
+<!-- 	  </div> -->
+    </div>
+	    <select class="searchlist">
+		  <option value="AL">Alabama</option>
+		   
+		  <option value="WY">Wyoming</option>
+		</select>
+
+        <!-- Add your site or application content here -->
+    </body>
+</html>

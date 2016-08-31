@@ -1,0 +1,15 @@
+{
+  "name": "quora",
+  "version": "1.0.0",
+  "description": "quoraclone",
+  "main": "index.js",
+  "dependencies": {
+    "lodash": "^4.15.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
