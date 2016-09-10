@@ -1,14 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title> LOGIN </title>
+  <title> LOGIN | QandA</title>
      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 
-<style type="text/css">
-body {
-    background-color: rgb(255, 255, 225);
-}
-</style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 <script type="text/javascript">
 $("document").ready(function(){
@@ -24,7 +19,6 @@ $("document").ready(function(){
       $.ajax({
           type: "POST",
           url: $form.attr("action"),
-          // data: $form.serializeArray(),
           data: 
           { 
             username : $("#username").val(), 
@@ -33,49 +27,59 @@ $("document").ready(function(){
           success: function(data){        
             window.location.href = '/main/';
                   }
-          // error: function(data){
-          //   $("#msg2").show();
-          //         }
             });
     }
     return false;
     });
 });
-    // var csrftoken = getCookie('csrftoken');
-
-
-
 
 </script>
+{% load staticfiles %}
+<link rel="stylesheet" href="{% static "css/loginpg.css" %}">
+
 </head>
-<body>
+<body background="{% static "img/bg.png" %}">
+<h3 class="heading">QandA</h3>
 <br><br><br><br>
 <div class="container">
-  <div class="row"><h3>Please Login</h3></div>
+  
   <br><br>
   <form id="formlogin" action="main/" method="POST">
     {% csrf_token %}
     <div class="input-group">
     <div class="row">
-    <div class="col-md-3" align="right">Username: </div>
+    <div>Username: </div>
     <input type="usrnm" class="form-control" id="username" placeholder="Enter Username">
     </div>
     <br>
     <div class="row">
-    <div class="col-md-3" align="right">Password: </div>
+    <div>Password: </div>
     <input type="password" class="form-control" id="password" placeholder="Password" onsubmit=fnsubmit()>
-    <div class="col-md-1"><br><br><br>
+    </div>
+    <div class="row">
+    <br>
     <button id = "submit" class="btn btn-info" type="submit">Submit</button>
     </div>
 
     </div>
-    </div>
+</div>
   </form>
     <br>
     <p id="msg1">Login successful</p>
     <p id="msg2">The username/password entered is incorrect</p>
 </div>
 
+<!-- google analytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-83518664-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
 
 </body>
 </html>

@@ -7,16 +7,50 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from collections  import OrderedDict,defaultdict
+from django.utils import timezone
 import json
 
 # Create your views here.
+@csrf_exempt
+@login_required(login_url='/')
 def mainpg(request):
 	if request.method == 'POST' and request.is_ajax:
+		vote = request.POST.get("clicked",False)
 		answer = request.POST.get("ans",False)
-		obj=Answer.objects.filter(ans__startswith=answer)[0]
-		incr = obj.upvote + 1
-		Answer.objects.filter(ans=answer).update(upvote=incr)
+		ansObj=Answer.objects.filter(ans__startswith=answer)
+		vote = ansObj[0].upvote + 1
+		Answer.objects.filter(ans__startswith=answer).update(upvote=vote)
 	return render_to_response('quora.html', context_instance=RequestContext(request))
+
+@csrf_exempt
+@login_required(login_url='/')
+def answer(request):
+	if request.method == 'POST' and request.is_ajax:
+		question = request.POST.get("forquestion",False)
+		answer = request.POST.get("answritten",False)
+		qObj = Question.objects.filter(qion__startswith=question)
+		newAns = Answer()
+		newAns.username = request.user
+		newAns.qion = qObj[0]
+		newAns.ans = answer
+		newAns.upvote = 0
+		newAns.date = timezone.now()
+		newAns.save()
+	return render_to_response('answer.html', context_instance=RequestContext(request))
+
+# @csrf_exempt
+# def content(request):
+
+# 	return HttpResponse("pass")
+ 
+def anspg_count(request):
+	anspg = {}
+	q=Question.objects.all();
+	for each in q:
+		count = Answer.objects.filter(qion=each).count();
+		anspg[each.qion] = count
+	return HttpResponse(json.dumps(anspg))
+
 
 # def feed(request):
 # 	# get all the Questions - sort - get answers for each question and return as JSON
@@ -59,7 +93,7 @@ def feed(request):
 
 
 @csrf_exempt
-# @login_required(login_url='/')
+@login_required(login_url='/')
 def foll_users(request):
 	users={}
 	temp={}
@@ -76,7 +110,7 @@ def foll_users(request):
 	
 
 @csrf_exempt
-# @login_required(login_url='/')
+@login_required(login_url='/')
 def user_list(request): 
 	if request.method == 'POST' and request.is_ajax:
 		rec=request.POST.get("selection",False)

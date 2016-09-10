@@ -1,12 +1,12 @@
 <!doctype html>
-<html>
+<html> 
     <head>
-        <title>Home - Quora</title>
+        <title>Home - Qanda</title>
         <meta name="description" content="">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
        
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
 		
@@ -14,14 +14,8 @@
 
 		{% load staticfiles %}
 		<link rel="stylesheet" href="{% static "css/quorahome.css" %}">
-		<!-- <script src="{% static "js/jquery.min.js" %}"></script> -->
 		<script src="{% static "js/mainjq.js" %}"></script>	
 		<script type="text/javascript">
-		// if ($(".js-example-basic-single").length > 0){
-		// 	$(".js-example-basic-single").select2({
-		// 		placeholder: "Ask or Search Quora",
-		// 	});
-		// }
 		</script>
 		
     </head>
@@ -30,24 +24,23 @@
 	<div class="container">
       <div class="rowsize" >
          <div class="col-md-1">
-         	<p class="title"> Quora </p>
+         	<p class="title"> Qand </p>
          </div>
       	 <div class="col-md-5">
       	 	<div class="ask_bar">
-				<select class="js-example-basic-single selector">
-				<option></option>
+				<!-- <select class="js-example-basic-single selector"> -->
+				<select class="selector">
+				<!-- <option></option> -->
 				</select>
-      	 		<!-- <textarea id="search_string" class="selector" type="text" rows="1" placeholder="Ask or Search Quora"></textarea>  -->
-      	 		<a class="AskButton" href="#"><div>Ask Question</div></a>	
-      	 		<!-- <button type="button"> Ask Questions</button> -->
-      	 		<!-- <button class="AskButton" type="submit">Ask Question</button> -->
+      	 		<a class="AskButton" href="#"><div>Ask Question</div></a>
       	 	</div>
          </div>
          <a class="imgtag" href="#">
          <div class="col-md-1">
          <img class="image" src="{% static "img/readfile.png" %}">Read
          </div></a>
-         <a class="imgtag" href="#">
+         <!-- change href on deployment -->
+         <a class="imgtag" href="http://127.0.0.1:8000/answer/">
          <div class="col-md-11">
          <img class="image" src="{% static "img/pencil.png" %}">Answer
          </div></a>
@@ -61,7 +54,6 @@
          </div></a>
       </div> 
 	<hr class="hozline" color="#ddd">
-	  <!-- <div>	 -->
 	     <div id="bdy" class="rowsize">
 		     <div class="col-md-2">
 			     <div class="ActionBarFeed">
@@ -95,12 +87,13 @@
 
 		  	 <div class="qa">
 		  	 </div>
-		  	 <!-- <div class="contenthead">Answer written . Fantasy . 2016</div>			  -->
+
+
+
+
 		  	 	<h4>Why do we deserve a superhero?</h4>
 		  	 	<a class="info" href="#" color="#333"><img class="image" src="{% static "img/batman2.png" %}">Batman</a>
 		     	<p class="answers" text-align="justify"> 
-			<!-- 	<%= yield %>
-  				<%= partial "footer" %> -->
 		     	Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laborum sint natus reiciendis harum. Mod reiciendis consequatur aspernatur porro quod laborum sit, ipsa tempore. Illo totam quisquam velit esse quia placeat. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iste non quod ab voluptate vel nihil praesentium aperiam fugiat esse, eveniet quibusdam repellat illum. Aliquid qui nisi eum, facilis quos repellendus. </p>
 		     	<a>(more)</a>
 
@@ -113,54 +106,11 @@
 			     		<a class="downvote">Comments</a>
 		     	</div>
 
-				<div class="subtitle"></div>
-
-
-				<div class="contenthead">Answer written . Fantasy . 2016</div>			 
-		  	 	<h4>What does 'S' stand for?</h4>
-		  	 	<a class="info" href="#" color="#333"><img class="image" src="{% static "img/superman.png" %}">Superman</a>
-		     	<p  class="answers" text-align="justify"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laborum sint natus reiciendis harum. Mod reiciendis consequatur aspernatur porro quod laborum sit, ipsa tempore. Illo totam quisquam velit esse quia placeat. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iste non quod ab voluptate vel nihil praesentium aperiam fugiat esse, eveniet quibusdam repellat illum. Aliquid qui nisi eum, facilis quos repellendus.</p>
-
-		     	<div class="ActionBar">
-			     		<a class="upvote">
-			     			<span>Upvote | </span>
-			     			<span>10K</span>
-			     		</a>
-			     		<a class="downvote">Downvote</a>
-			     		<a class="downvote">Comments</a>
-		     	</div>
-				<div class="subtitle"></div>
-
-				<div class="contenthead">Answer written . Technology . 2016</div>			 
-		  	 	<h4>Where is Krypton?</h4>
-		  	 	<a class="info" href="#" color="#333"><img class="image" src="{% static "img/superman.png" %}">Superman</a>
-		     	<p class="answers" text-align="justify"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laborum sint natus reiciendis harum. Mod reiciendis consequatur aspernatur porro quod laborum sit, ipsa tempore. Illo totam quisquam velit esse quia placeat. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iste non quod ab voluptate vel nihil praesentium aperiam fugiat esse, eveniet quibusdam repellat illum. Aliquid qui nisi eum, facilis quos repellendus.</p>
-
-		     	<div class="ActionBar">
-			     		<a class="upvote">
-			     			<span>Upvote | </span>
-			     			<span>21.1K</span>
-			     		</a>
-			     		<a class="downvote">Downvote</a>
-			     		<a class="downvote">Comments</a>
-		     	</div>
-				<div class="subtitle"></div>
-
-		     </div>
-			
+				<div class="separator"></div>
 
 		     <div class="col-md-2">
 		     	<div class="test">
 		     	</div>
-		     	<!-- <div class="ActionBarFeed">
-		     		<span class="subtitle">Endorse</span>
-		     		<span><a class="feededit">Next</a>
-			     </div>
-			    <div class="sidebar">
-			    <img class="image" src="{% static "img/hulk.jpg" %}"> What topic would <a href="#" font-color="#eee">Hulk</a> know about?
-				</div>
-
-				<input class="selector_side" placeholder="Select Topic"></input> -->
 		     	
 		     </div>
 	     </div>
