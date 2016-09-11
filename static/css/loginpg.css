@@ -1,0 +1,26 @@
+body {
+	background: linear-gradient(to right top, white, #b92b27) fixed;
+}
+
+.heading {
+	margin-left: 8.8%;
+	margin-top: 3%;
+}
+
+.heading {
+	color: "white";
+}
+
+#or {
+	margin-left: -2%;
+
+}
+
+#signup {
+	margin-left: -1%;
+	margin-top: -0.7%;
+}
+
+#submit {
+	/*color: #ddd;*/
+}

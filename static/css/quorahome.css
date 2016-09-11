@@ -99,7 +99,6 @@ h4 {
 	color: #b92b27;
 	font-size: 15px;
 	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-    background-color: #eee;
 }    
 
 .col-md-11 {
@@ -312,4 +311,14 @@ li {
     background-image: none;
     border: 1px solid transparent;
     border-radius: 4px;
+}
+
+#mainnamebutton {
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
+    background-color: "white";
 }

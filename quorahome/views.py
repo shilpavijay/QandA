@@ -24,6 +24,32 @@ def mainpg(request):
 
 @csrf_exempt
 @login_required(login_url='/')
+def qasked(request):
+	qasked = request.POST.get("askquestion",False)
+	print qasked
+	newQ = Question()
+	newQ.username = request.user
+	newQ.qion = qasked
+	newQ.category = "userreq"
+	newQ.date = timezone.now()
+	newQ.save()
+	return HttpResponse("pass")
+
+@csrf_exempt
+def signup(request):
+	if request.method == 'POST' and request.is_ajax:
+		usernm = request.POST.get("username",False)
+		print usernm
+		pswd = request.POST.get("password",False)
+		newUser = User()
+		newUser.username = usernm
+		newUser.password = pswd
+		newUser.save()
+	return render_to_response('signup.html', context_instance=RequestContext(request))
+
+
+@csrf_exempt
+@login_required(login_url='/')
 def answer(request):
 	if request.method == 'POST' and request.is_ajax:
 		question = request.POST.get("forquestion",False)
@@ -147,7 +173,16 @@ def ulogin(request):
 			print("Wrong username or password entered. Please check.")
 	return render(request,'login.html')		
 
-# @csrf_exempt
-# def logout_view(request):
-# 	logout(request)
-# 	return(render(request,'login.html')	
+
+@csrf_exempt
+def ret_ans(request,question):
+	q = eval(question)
+	qObj = Question.objects.filter(qion__startswith=q)
+	answers = Answer.objects.filter(qion__startswith=qObj)
+	return HttpResponse(serializers.serialize('json',answers))
+
+
+@csrf_exempt
+def logout_view(request):
+	logout(request)
+	return(render(request,'login.html'))	

@@ -1,21 +1,20 @@
-function search() {
-  $("select").change(function() {
-      var filter = $(this).val();
-      console.log(filter);
-      $("h4").each(function() {         
-          var s = $(this).text().toLowerCase();     
-          console.log(s); 
-          if ($(this).text().search(new RegExp(filter, "i")) < 0) {
-                // $(this).fadeOut();
+// function search() {
+//   $("select").change(function() {
+//       var filter = $(this).val();
+//       console.log(filter);
+//       $("h4").each(function() {         
+//           var s = $(this).text().toLowerCase();     
+//           console.log(s); 
+//           if ($(this).text().search(new RegExp(filter, "i")) < 0) {
+//                 // $(this).fadeOut();
+//               // Need to revisit the fadeOut() after impl feed(): should be $(this).parent().fadeOut()
+//             } else {
+//                 // $(this).show();
 
-              // Need to revisit the fadeOut() after impl feed(): should be $(this).parent().fadeOut()
-            } else {
-                // $(this).show();
-
-            }         
-    });
-  });
-}
+//             }         
+//     });
+//   });
+// }
 
 
 function feed() {
@@ -23,7 +22,7 @@ function feed() {
   // var start = _.template('<div class="qna">');
   var content_head = _.template('<div class="contenthead">Question asked . India . 22m</div> ')
   var feed_q = _.template('<h4 class="<%= c %>"><%= q %></h4>');
-  var feed_ans = _.template('<br/><a class="contenthead">Read <%= a %> Answers </a><br/>');
+  var feed_ans = _.template('<br/><a class="contenthead <%= c %>">Read <%= a %> Answers </a><br/>');
   var ans_bar = _.template('<div class="ActionBar"><a class="upvote <%= c %>" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo"><span class="clickans">Answer</span><a class="downvote">Pass</a><a class="downvote">Downvote</a><br/></div><br/>');
   var line = _.template('<div class="separator"></div>');
   $.get("/ans_count/",function(data){
@@ -35,7 +34,7 @@ function feed() {
       // $(".upvote #modaltitle").text(question);
       $(".qa").append(content_head());  
       $(".qa").append(feed_q({ 'c': idcount,'q': question }));
-      $(".qa").append(feed_ans({ 'a' : count }));
+      $(".qa").append(feed_ans({ 'c': idcount,'a' : count }));
       $(".qa").append(ans_bar({  'c': idcount }));
       idcount = idcount + 1
       });    
@@ -60,6 +59,15 @@ $("document").ready(function(){
      });
  // $(".selector").select2("val", null);
     }
+
+    $(".qa").on('click','.contenthead',function(){
+        var cl,q;    
+        cl = $(this).attr("class").slice(-1);
+        cl = ".".concat(cl)
+        q = $("h4"+cl).text();
+        $(".contenthead"+cl).attr("href",q);
+    })
+
 
   $(".qa").on('click','.upvote',function(){ 
       var cl,q;    

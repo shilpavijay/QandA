@@ -3,71 +3,55 @@
 <head>
   <title> LOGIN | QandA</title>
      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-<script type="text/javascript">
-$("document").ready(function(){
-    var $form=$("formlogin");
-    $("#msg1").hide();
-    $("#msg2").hide();
-    $("#submit").click(function(event){
-      if($(".form-control").val().length===0){
-        $("#msg2").show();
-        event.preventDefault();
-      }
-      else {
-      $.ajax({
-          type: "POST",
-          url: $form.attr("action"),
-          data: 
-          { 
-            username : $("#username").val(), 
-            password : $("#password").val()
-          },
-          success: function(data){        
-            window.location.href = '/main/';
-                  }
-            });
-    }
-    return false;
-    });
-});
+      {% load staticfiles %}
 
-</script>
-{% load staticfiles %}
-<link rel="stylesheet" href="{% static "css/loginpg.css" %}">
+      <link rel="stylesheet" href="{% static "css/loginpg.css" %}">
+      <script src="{% static "js/loginjq.js" %}"></script> 
+      <script type="text/javascript"></script>
 
 </head>
-<body background="{% static "img/bg.png" %}">
-<h3 class="heading">QandA</h3>
-<br><br><br><br>
-<div class="container">
-  
-  <br><br>
-  <form id="formlogin" action="main/" method="POST">
-    {% csrf_token %}
-    <div class="input-group">
-    <div class="row">
-    <div>Username: </div>
-    <input type="usrnm" class="form-control" id="username" placeholder="Enter Username">
-    </div>
-    <br>
-    <div class="row">
-    <div>Password: </div>
-    <input type="password" class="form-control" id="password" placeholder="Password" onsubmit=fnsubmit()>
-    </div>
-    <div class="row">
-    <br>
-    <button id = "submit" class="btn btn-info" type="submit">Submit</button>
-    </div>
+<body>
+      <h3 class="heading" color="white">QandA</h3>
+      <br><br><br><br>
+      <div class="container">
+        <div class="rowsize" >
+         <div class="col-md-3">
+          <br><br>
+          <form id="formlogin" action="main/" method="POST">
+          {% csrf_token %}
+          <div class="input-group">
+          <div class="row">
+          <!-- <div>Username: </div> -->
+          <input type="usrnm" class="form-control" id="username" placeholder="Enter Username">
+          </div>
+          <br>
+          <div class="row">
+          <!-- <div>Password: </div> -->
+          <input type="password" class="form-control" id="password" placeholder="Password" onsubmit=fnsubmit()>
+          </div>
+          <div class="row">
+          <br>
+          <button id = "submit" class="btn btn-info" type="submit">Submit</button>
+          </div>
 
-    </div>
-</div>
-  </form>
-    <br>
+          </div>
+          </form>
+        </div>
+        <div id="or" class="col-md-1"><br><br><br><br> <p> OR </p>
+        </div>
+        <div id="signup" class="col-md-1">
+        <br><br><br><br>
+        <a href="/signup/"><button id = "submit" class="btn btn-info" type="submit">Sign Up</button></a>
+        </div>
+      </div>
+      </div>
+
+
+    <br><br>
     <p id="msg1">Login successful</p>
-    <p id="msg2">The username/password entered is incorrect</p>
-</div>
+    <p id="msg2">The username/password entered is blank</p>
 
 <!-- google analytics -->
 <script>
