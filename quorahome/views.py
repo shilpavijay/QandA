@@ -67,14 +67,14 @@ def answer(request):
 # @csrf_exempt
 # def content(request):
 
-# 	return HttpResponse("pass")
+# 	return HttpResponse("pass") 
  
 def anspg_count(request):
-	anspg = {}
+	anspg = defaultdict()
 	q=Question.objects.all();
 	for each in q:
 		count = Answer.objects.filter(qion=each).count();
-		anspg[each.qion] = count
+		anspg[each.qion] = [each.id,count]
 	return HttpResponse(json.dumps(anspg))
 
 
@@ -113,9 +113,9 @@ def feed(request):
 		if q.qion not in qanda.keys():
 			qanda[q.qion]={a.ans:a.upvote}
 		else:
-			qanda[q.qion].update({a.ans:a.upvote})
+			if a.upvote > qanda[q.qion].values():
+				qanda[q.qion]={a.ans:a.upvote}
 	return HttpResponse(json.dumps(OrderedDict(qanda.items())))
-
 
 
 @csrf_exempt
@@ -177,9 +177,21 @@ def ulogin(request):
 @csrf_exempt
 def ret_ans(request,question):
 	q = eval(question)
-	qObj = Question.objects.filter(qion__startswith=q)
-	answers = Answer.objects.filter(qion__startswith=qObj)
-	return HttpResponse(serializers.serialize('json',answers))
+	qanda = OrderedDefaultDict(OrderedDict) #ex:{q:{a1:v1,a2:v2},...}	
+	qObj = Question.objects.get(id=q)
+	answers = Answer.objects.filter(qion=qObj)
+
+	ansO = answers.order_by('-upvote')
+	for a in ansO:
+		q = Question.objects.get(qion = a.qion.qion)
+		if qObj.qion not in qanda.keys():
+			qanda[qObj.qion]={a.ans:a.upvote}
+		else:
+			qanda[qObj.qion].update({a.ans:a.upvote})
+	return HttpResponse(json.dumps(OrderedDict(qanda.items())))
+
+def qonlypg(request):
+	return render(request,'qonlypg.html')	
 
 
 @csrf_exempt

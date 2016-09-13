@@ -28,16 +28,18 @@
          	<p class="title"> Qand </p>
          </div>
       	 <div class="col-md-5">
-      	 	<div class="ask_bar">
-				<!-- <select class="js-example-basic-single selector"> -->
-				<select class="selector">
-				<option></option>
-				</select>
-      	 		<a class="AskButton" href="#"><div>Ask Question</div></a>
-      	 	</div>
+          <div class="ask_bar">
+        <!-- <select class="js-example-basic-single selector"> -->
+        <!-- <select class="selector"></select> -->
+        <!-- <option></option> -->
+        {% csrf_token %}
+        <form id="askform">
+        <input id="askquestionhere" class="selector" placeholder="   Ask a Question here">
+            <a id="askbutton" class="AskButton" href="#"><div>Ask Question</div></a>
+            </form>
+          </div>
          </div>
-         <!-- change href on deployment -->
-         <a class="imgtag" href="http://127.0.0.1:8000/main/">
+         <a class="imgtag" href="/main/">
          <div class="col-md-1">
          <img id = "read" class="image" src="{% static "img/readfile.png" %}">Read
          </div></a>
@@ -64,19 +66,19 @@
 
 			     <div class="info1"></div>
 			     <ul><li class="feedlist"><a href="#">Questions For You</a></li></ul>
-			     <ul><li class="feedlist"><a href="#">Answer Requests</a></li></ul>
+			     <!-- <ul><li class="feedlist"><a href="#">Answer Requests</a></li></ul>
 			     <ul><li class="feedlist"><a href="#">Answer Later</a></li></ul>
-			     <ul><li class="feedlist"><a href="#">Drafts</a></li></ul>
+			     <ul><li class="feedlist"><a href="#">Drafts</a></li></ul> -->
 
 				<br>
 				<br>
-				<img class="image1" src="{% static "img/arrow.png" %}">
+				<!-- <img class="image1" src="{% static "img/arrow.png" %}">
 			     <span class="ActionBarFeed">Trending Now</span>
 			     <div class="info1">Top listings</div>
 			     <ul><li class="feedlist"><a href="#">Strange things</a></li></ul>
 			     <ul><li class="feedlist"><a href="#">P.V Sindhu wins Silver</a></li></ul>
 			     <ul><li class="feedlist"><a href="#">Olympics @ Rio</a></li></ul>
-			     <ul><li class="feedlist"><a href="#">Rustom</a></li></ul>
+			     <ul><li class="feedlist"><a href="#">Rustom</a></li></ul> -->
 			 </div>
 
 		  	 <div class="col-md-6"> 
