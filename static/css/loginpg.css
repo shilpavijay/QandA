@@ -24,3 +24,16 @@ body {
 #submit {
 	/*color: #ddd;*/
 }
+
+#fbuser {
+	visibility: hidden;
+}
+
+#loggedin {
+	margin-left: 120px;
+	margin-top: 12px;
+	color: "black";
+	background-color: "white";
+	text-decoration: underline;
+
+}

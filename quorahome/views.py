@@ -13,14 +13,33 @@ import json
 # Create your views here.
 @csrf_exempt
 @login_required(login_url='/')
-def mainpg(request):
+def mainpg(request):	
+	return render_to_response('quora.html', context_instance=RequestContext(request))
+
+@csrf_exempt
+@login_required(login_url='/')
+def upvote(request):
 	if request.method == 'POST' and request.is_ajax:
 		vote = request.POST.get("clicked",False)
 		answer = request.POST.get("ans",False)
 		ansObj=Answer.objects.filter(ans__startswith=answer)
 		vote = ansObj[0].upvote + 1
 		Answer.objects.filter(ans__startswith=answer).update(upvote=vote)
-	return render_to_response('quora.html', context_instance=RequestContext(request))
+	return HttpResponse("pass")
+
+
+def downvote(request):
+	if request.method == 'POST' and request.is_ajax:
+		vote = request.POST.get("clicked",False)
+		answer = request.POST.get("ans",False)
+		print vote,answer
+		ansObj=Answer.objects.filter(ans__startswith=answer)
+		vote = ansObj[0].upvote - 1
+		print vote
+		a=Answer.objects.filter(ans__startswith=answer).update(upvote=vote)
+		print a
+	return HttpResponse("pass")	
+
 
 @csrf_exempt
 @login_required(login_url='/')
@@ -77,21 +96,8 @@ def anspg_count(request):
 		anspg[each.qion] = [each.id,count]
 	return HttpResponse(json.dumps(anspg))
 
-
-# def feed(request):
-# 	# get all the Questions - sort - get answers for each question and return as JSON
-# 	feed={}
-# 	questions = []
-# 	answers = []
-# 	ansO = Answer.objects.order_by('upvote')
-# 	for a in ansO:
-# 		q = Question.objects.filter(qion = a.qion.qion)
-# 		if q[0].qion not in questions:  #handling duplicates
-# 			questions.append(q[0].qion)
-# 			answers.append(a.ans)
-# 	feed['questions'] = questions
-# 	feed['answers'] = answers
-# 	return HttpResponse(json.dumps(feed))
+def user(request,username):
+	return render(request,'user.html')
 
 class OrderedDefaultDict(OrderedDict):
     def __init__(self, default_factory=None, *args, **kwargs):
@@ -105,17 +111,40 @@ class OrderedDefaultDict(OrderedDict):
 
 def feed(request):
 	# get all the Questions - sort - get answers for each question and return as JSON
-	qanda = OrderedDefaultDict(OrderedDict) #ex:{q:{a1:v1,a2:v2},...}	
+	qanda = OrderedDefaultDict(OrderedDict(defaultdict())) #ex:{q:{a1:v1,a2:v2},...}	
 	# temp ={}
 	ansO = Answer.objects.order_by('-upvote')
 	for a in ansO:
 		q = Question.objects.get(qion = a.qion.qion)
 		if q.qion not in qanda.keys():
-			qanda[q.qion]={a.ans:a.upvote}
+			qanda[q.qion]={a.ans:[a.upvote,a.date.strftime('%d-%m-%Y %H:%M')]}
 		else:
 			if a.upvote > qanda[q.qion].values():
-				qanda[q.qion]={a.ans:a.upvote}
+				qanda[q.qion]={a.ans:[a.upvote,a.date.strftime('%d-%m-%Y %H:%M')]}
 	return HttpResponse(json.dumps(OrderedDict(qanda.items())))
+
+def userans(request,username):
+	u = username
+	qanda = OrderedDefaultDict(OrderedDict(defaultdict()))#ex:{q:{a1:v1,a2:v2},...}	
+	user = User.objects.get(username=u)
+	answers = Answer.objects.filter(username=user)
+	for a in answers:
+		qObj = Question.objects.get(qion = a.qion.qion)
+		if qObj.qion not in qanda.keys():
+			qanda[qObj.qion]={a.ans:[a.upvote,a.date.strftime('%d-%m-%Y %H:%M')]}
+		else:
+			qanda[qObj.qion].update({a.ans:[a.upvote,a.date.strftime('%d-%m-%Y %H:%M')]})
+	return HttpResponse(json.dumps(OrderedDict(qanda.items())))
+
+def userquestion(request,username):
+	u = username
+	anspg = defaultdict()
+	user = User.objects.get(username=u)
+	q=Question.objects.filter(username=user);
+	for each in q:
+		count = Answer.objects.filter(qion=each).count();
+		anspg[each.qion] = [each.id,count]
+	return HttpResponse(json.dumps(anspg))
 
 
 @csrf_exempt
@@ -177,7 +206,7 @@ def ulogin(request):
 @csrf_exempt
 def ret_ans(request,question):
 	q = eval(question)
-	qanda = OrderedDefaultDict(OrderedDict) #ex:{q:{a1:v1,a2:v2},...}	
+	qanda = OrderedDefaultDict(OrderedDict(defaultdict())) #ex:{q:{a1:v1,a2:v2},...}	
 	qObj = Question.objects.get(id=q)
 	answers = Answer.objects.filter(qion=qObj)
 
@@ -185,9 +214,9 @@ def ret_ans(request,question):
 	for a in ansO:
 		q = Question.objects.get(qion = a.qion.qion)
 		if qObj.qion not in qanda.keys():
-			qanda[qObj.qion]={a.ans:a.upvote}
+			qanda[qObj.qion]={a.ans:[a.upvote,a.date.strftime('%d-%m-%Y %H:%M')]}
 		else:
-			qanda[qObj.qion].update({a.ans:a.upvote})
+			qanda[qObj.qion].update({a.ans:[a.upvote,a.date.strftime('%d-%m-%Y %H:%M')]})
 	return HttpResponse(json.dumps(OrderedDict(qanda.items())))
 
 def qonlypg(request):

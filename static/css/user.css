@@ -26,6 +26,18 @@ body {
     font: 2.4em solid;
 }
 
+.time {
+    margin-bottom: 4px;
+    transition: opacity ease-in-out 100ms,color ease-in-out 100ms,background-color ease-in-out 100ms,border-color ease-in-out 100ms;
+    padding: 3px 7px 4px 7px;
+    text-align: center;
+    font-weight: 500;
+    color: #999;
+    float: left;
+    text-align: right;
+    margin-left: 274px;
+}
+
 .inputarea {
     display: table;
     box-sizing: border-box;
@@ -160,7 +172,6 @@ h4 {
     /*border-bottom: 1px solid #e2e2e2;*/
     margin-bottom: 16px;
     padding-bottom: 8px;
-    padding-left: 40px;
 }
 
 .separator {
@@ -184,8 +195,6 @@ h4 {
 	margin-top: 4px;
     font-size: 14px;
     padding: 15px 0px 0 7px;
-    /*text-align: justify-all;*/
-    word-wrap: break-word;
 }
 
 .info {
@@ -218,7 +227,7 @@ h4 {
 .ActionBarFeed {
     font-size: 13px;
     margin-bottom: -6px;
-    padding: 32px 0 6px;
+    padding: 32px 12px 6px;
     bottom: 0;
     clear: left;
     border-bottom: 1px solid #e2e2e2;
@@ -255,18 +264,6 @@ h4 {
     text-align: justify-all;
 }
 
-.time {
-    margin-bottom: 4px;
-    transition: opacity ease-in-out 100ms,color ease-in-out 100ms,background-color ease-in-out 100ms,border-color ease-in-out 100ms;
-    padding: 3px 7px 4px 7px;
-    text-align: center;
-    font-weight: 500;
-    color: #999;
-    float: left;
-    text-align: right;
-    margin-left: 274px;
-}
-
 .feededit{
     margin-bottom: 4px;
     /*transition: opacity ease-in-out 100ms,color ease-in-out 100ms,background-color ease-in-out 100ms,border-color ease-in-out 100ms;*/
@@ -282,7 +279,7 @@ h4 {
 .feedlist {
 	color: #333;
 	position: relative;
-    font-size: 12px;
+    font-size: 14px;
 }
 
 a {
@@ -293,6 +290,12 @@ a {
 li {
 	font-size: 14px;
 	color: #ddd;
+}
+
+ul {
+    margin-top: 18px;
+    margin-bottom: 10px;
+    font-size: 17px;
 }
 
 .selector_side{
@@ -335,18 +338,35 @@ li {
     background-color: "white";
 }
 
-/*Facebook Connect Button*/
-.fb_box .fb_block a{
-color:#ff00ff; /*font color*/
-background:#ffff00; /*button color*/
-border: solid 1px #000000; /* border color, size, and line style */
-font-family: arial, sans-serif; /* font-family determines the web-safe font used for the button name */
-font-size: 14px; /* size of the text in the Facebook Connect Button */
-border-radius: 3px; /* creates rounded corners, for a more button-like look.  The larger the number, the more rounded the corners.  If you don’t want rounded corners, change the border-radius to 0px */
-padding:5px; /* amount of space between the text and the border of the button */
+.header {
+    position: relative;
+    box-sizing: border-box;
+    margin: 14px 0 -22px -9px;
+    padding: 0 0 0.5px 172px;
+    border-bottom: 2px solid #e2e2e2;
+    width: 855px;
 }
 
-/*Facebook Connect Button Hover*/
-.fb_box .fb_block a:hover{
-background:#dd0000; /* background color of the Facebook Connect Button when you hover over it */
+.profilepic {
+    position: absolute;
+    left: 0;
+    height: 142px;
+    width: 142px;
+    margin-left: 58px;
+    /*border-radius: 75px;*/
+    
+}
+
+.headercontent {
+    position: relative;
+    min-height: 158px;
+    margin-left: 70px;
+    padding-top: 25px;
+}
+
+.profpic {
+    height: 150px;
+    width: 150px;
+    border-radius: 75px;
+
 }

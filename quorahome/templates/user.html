@@ -1,0 +1,147 @@
+<!doctype html>
+<html> 
+    <head> 
+        <title>{{ request.user.username }}-Qanda</title>
+        <meta name="description" content="">
+         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+       
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.15.0/lodash.js"></script>
+
+		{% load staticfiles %}
+
+		<link rel="stylesheet" href="{% static "css/user.css" %}">
+		<script type="text/javascript"> 
+		var profpic = "{% static "img/batman2.png" %}"
+		</script>
+		<script src="{% static "js/user.js" %}"></script>	
+		<script type="text/javascript">
+		</script>
+		
+    </head>
+    <body>
+    <hr class="hozfrst" color="#b92b27">
+	<div class="container">
+      <div class="rowsize" >
+         <div class="col-md-1">
+         	<p class="title"> Qand </p>
+         </div>
+      	 <div class="col-md-5">
+      	 	<div class="ask_bar">
+				<!-- <select class="js-example-basic-single selector"> -->
+				<!-- <select class="selector"></select> -->
+				<!-- <option></option> -->
+				{% csrf_token %}
+				<form id="askform">
+				<input id="askquestionhere" class="selector" placeholder="   Ask a Question here">
+      	 		<a id="askbutton" class="AskButton" href="#"><div>Ask Question</div></a>
+      	 		</form>
+      	 	</div>
+         </div>
+         <a class="imgtag" href="#">
+         <div class="col-md-1">
+         <img class="image" src="{% static "img/readfile.png" %}">Read
+         </div></a>
+         <!-- change href on deployment -->
+         <a class="imgtag" href="http://127.0.0.1:8000/answer/">
+         <div class="col-md-11">
+         <img class="image" src="{% static "img/pencil.png" %}">Answer
+         </div></a>
+         <a class="imgtag" href="#">
+         <div class="col-md-12">
+         <img class="image" src="{% static "img/bell1.png" %}">Notifications
+         </div></a>
+         <!-- <a class="imgtag" href="#"> -->
+         <div class="col-md-2"> 
+         <div class="dropdown">
+         <!-- <img class="image" src="{% static "img/batman2.png" %}">{{ request.user.username }} -->
+        <button id="mainnamebutton" class="dropdown-toggle" type="button" data-toggle="dropdown">
+		<a class="imgtag" href="#"><img class="image" src="{% static "img/batman2.png" %}">
+        {{ request.user.username }}
+	    <span class="caret"></span></button>
+	    <ul class="dropdown-menu">
+	      <li><a href="/logout/">Logout</a></li>
+	    </ul>
+	    </a>
+	    </div>
+         </div>
+      </div> 
+	<hr class="hozline" color="#ddd">
+
+	<div class="header">
+		<div class="profilepic">
+		<span><img class="profpic" src="{% static "img/profile.png" %}"></span>
+
+		</div>
+		<div class="headercontent">
+			<h1 id=username></h1>
+		</div>
+		</div>
+
+	     <div id="bdy" class="rowsize">
+		     <div class="col-md-2">
+			     <div class="ActionBarFeed">
+		     		<span class="subtitle1">Feeds</span>
+			     </div>
+			<div class="sidebar">
+			     <ul><li class="feedlist"><a href="#">Answers</a></li></ul>
+			     <ul><li class="feedlist"><a href="#">Questions</a></li></ul>
+			    
+			</div>
+				<br>
+				<br>
+			 </div>
+
+		  	 <div class="col-md-6">
+		  	 <div id="feedtitle" class="subtitle">Answers</div>
+
+		  	 <div class="qa">
+		  	 </div>
+
+				<div class="separator"></div>
+
+		     <div class="col-md-2">
+		     	<div class="test">
+		     </div>
+		     	
+		     </div>
+	     </div>
+    </div>
+
+<!-- modal -->
+<div id="modal" class="bd-example">
+  <!-- <a data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Answer</a> -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h3 id="modaltitle" class="modal-title" id="exampleModalLabel"></h3>
+        </div>
+        <div class="modal-body">
+        {% csrf_token %} 
+          <form>
+            <div class="form-group">
+              <label for="answer-text" class="form-control-label">Answer</label>
+              <textarea class="form-control" id="answer-text" rows="15"></textarea>
+            </div>          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
+          <!-- <button data-dismiss="modal" aria-label="Close" id="written_ans" type="button" class="btn btn-primary button">Submit
+          </button> -->
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    
+  </body>
+</html>

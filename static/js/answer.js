@@ -35,7 +35,7 @@ function feed() {
   var content_head = _.template('<div class="contenthead">Question asked . India . 22m</div> ')
   var feed_q = _.template('<h4 class=" <%= c %>"><%= q %></h4>');
   var feed_ans = _.template('<br/><a class="contenthead <%= c %>">Read <%= a %> Answers </a><br/>');
-  var ans_bar = _.template('<div class="ActionBar"><a class="upvote <%= c %>" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo"><span class="clickans">Answer</span><a class="downvote">Pass</a><a class="downvote">Downvote</a><br/></div><br/>');
+  var ans_bar = _.template('<div class="ActionBar"><a class="upvote <%= c %>" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo"><span class="clickans">Answer</span><a class="downvote">Pass</a><br/></div><br/>');
   var line = _.template('<div class="separator"></div>');
   $.get("/ans_count/",function(data){
     json = JSON.parse(data);
@@ -93,7 +93,7 @@ function writeans() {
       $("#modaltitle").text(q);
   });
 
-    $("#written_ans").click(function(event){
+    $(".btn").click(function(event){
     if($(".form-control").val().length===0){
       event.preventDefault();
     }
@@ -108,7 +108,8 @@ function writeans() {
           answritten : $("#answer-text").val()
         },
         success: function(data){ 
-          $("#answer-text").val("")
+          $("#answer-text").val("");
+          $("#modal .close").click()
                 }
           });
   }

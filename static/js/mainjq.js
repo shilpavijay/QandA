@@ -18,25 +18,23 @@
 //   });
 // }
 
-
 function feed() {
   
   // var start = _.template('<div class="qna">');
   var feed_q = _.template('<a class="viewq"><h4 class="<%= c %>"> <%= q %> </h4><br/></a>');
   var pic_user = _.template('<a class="info" href="#" color="#333"><img class="image" src= <%=i %> > Batman</a>');
   var feed_ans = _.template('<br/><p class="answers <%= c %>"><%= a %> </p><br/>');
-  var vote_bar = _.template('<div class="ActionBar"><a class="upvote <%= c %>"><span>Upvote |  </span><span><%= v %></span></a><a class="downvote">Downvote</a><a class="downvote">Comments</a><br/></div><br/>');
+  var vote_bar = _.template('<div class="ActionBar"><a class="upvote <%= c %>"><span>Upvote |  </span><span><%= v %></span></a><a class="downvote <%= c %>">Downvote</a><a class="downvote">Comments</a><p class="time"><%= t %></p></div><br/>');
   var line = _.template('<div class="separator"></div>');
   $.get("/feed/",function(data){
     json = JSON.parse(data);
     var idcount = 0;
     $.each(json, function(question,answers){     
       $(".qa").append(feed_q({ 'c': idcount,'q': question }));
-    
-      $.each(answers,function(ans,vote){    
+      $.each(answers,function(ans,info){
           $(".qa").append(pic_user({ 'i': profpic }));
           $(".qa").append(feed_ans({ 'c': idcount, 'a' : ans }));
-          $(".qa").append(vote_bar({ 'c': idcount, 'v': vote }));
+          $(".qa").append(vote_bar({ 'c': idcount, 'v': info[0],'t': info[1] }));
           $(".qa").append(line());
           idcount = idcount + 1;
       });    
@@ -46,7 +44,6 @@ function feed() {
   return true; 
 }
 
-
 function upvote_click() {
     $(".qa").one('click','.upvote',function(){
       var cl,q;    
@@ -55,7 +52,7 @@ function upvote_click() {
       q = $("p"+cl).text().slice(0,80);
       $.ajax({
         type: "POST",
-        url: "/main/",
+        url: "/upvote/",
         data: 
         { 
           clicked: 'yes',
@@ -71,6 +68,33 @@ function upvote_click() {
           });
   });
 }
+
+function downvote_click() {
+    $(".qa").one('click','.downvote',function(){
+      var cl,q;    
+      cl = $(this).attr("class").slice(-1);
+      cl = ".".concat(cl)
+      q = $("p"+cl).text().slice(0,80);
+      $.ajax({
+        type: "POST",
+        url: "/downvote/",
+        data: 
+        { 
+          clicked: 'yes',
+          ans: q
+        },
+        success: function(data){ 
+              // setTimeout(feed,10);
+              var uptext = $(".upvote" + cl).text();
+              var upcount = parseInt(uptext.slice(-3));
+              upcount = upcount-1;
+              // alert(uptext.slice(0,-3) + upcount);
+              $(".upvote" + cl).text(uptext.slice(0,-3) + ' ' +upcount);
+                }
+          });
+  });
+}
+
 
 function ask() {
     $("#askbutton").click(function(event){
@@ -161,8 +185,7 @@ $("document").ready(function(){
   feed();
   setTimeout(wrapfeed,100);
   setTimeout(upvote_click,100);
-  // setTimeout(feed(),100);
-  // upvote_click();
+  setTimeout(downvote_click,100);
   ask();
   readans();
   readansmore();

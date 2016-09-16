@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'quorahome',
+    'social.apps.django_app.default',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -52,6 +53,14 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+)
+
+SOCIAL_AUTH_FACEBOOK_KEY='1784543425113726'
+SOCIAL_AUTH_FACEBOOK_SECRET='0f405463b04a464cf1db8a4b4ad1dba5'
+
+AUTHENTICATION_BACKENDS = (
+    'social.backends.facebook.FacebookOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
 )
 
 ROOT_URLCONF = 'Quora.urls'
@@ -98,6 +107,18 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+#start - For Facebook redirects:
+
+LOGIN_REDIRECT_URL = '/main/'
+
+LOGOUT_URL= '/logout/'
+
+LOGIN_ERROR_URL = '/'
+
+SOCIAL_AUTH_LOGIN_REDIRECT_URL='/main/'
+
+#ends - Facebook Redirect
 
 
 # Static files (CSS, JavaScript, Images)

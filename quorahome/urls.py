@@ -1,11 +1,15 @@
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.contrib.auth import views as auth_views
 from quorahome.views import *
 
 
 urlpatterns = [
 	url(r'^$', ulogin), 			#renders and validates login
+	url(r'', include('social.apps.django_app.urls', namespace='social')),
+	url('', include('django.contrib.auth.urls',namespace='auth')),
 	url(r'^main/$',mainpg),
+	url(r'^upvote/$',upvote),
+	url(r'^downvote/$',downvote),
 	url(r'^answer/$',answer),
 	url(r'^ans_count/',anspg_count),
 	url(r'^feed/$',feed), 			#feed details - main page
@@ -17,4 +21,7 @@ urlpatterns = [
 	url(r'^askq/$',qasked),
 	url(r'^signup/$',signup),
 	url(r'^logout/$', logout_view), # URL for logout
+	url(r'^user/(?P<username>.*)/$', user),
+	url(r'^userq/(?P<username>.*)/$', userquestion),
+	url(r'^userans/(?P<username>.*)/$', userans),
 	]

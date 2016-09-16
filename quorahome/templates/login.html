@@ -9,7 +9,8 @@
 
       <link rel="stylesheet" href="{% static "css/loginpg.css" %}">
       <script src="{% static "js/loginjq.js" %}"></script> 
-      <script type="text/javascript"></script>
+      <script type="text/javascript">
+      </script>
 
 </head>
 <body>
@@ -42,11 +43,31 @@
         <div id="or" class="col-md-1"><br><br><br><br> <p> OR </p>
         </div>
         <div id="signup" class="col-md-1">
-        <br><br><br><br>
-        <a href="/signup/"><button id = "submit" class="btn btn-info" type="submit">Sign Up</button></a>
+        <br><br><br>
+        <a href="/signup/"><button id = "submit" class="btn btn-info" type="submit"> Sign Up</button></a>
+        <br><br>
+        {% block main %}
+        {% if user and not user.is_anonymous %}
+          <!-- <p id="fbuser"> {{ user.get_full_name|default:user.username }}! </p> -->
+         
+        {% else %}         
+        <a href="{% url 'social:begin' 'facebook' %}?next=/main/"><button onclick = "myFacebookLogin()" id = "fbsignin" class="btn btn-info" type="submit">Sign Up Using Facebook</button></a>
+        <br>       
+        <!-- onclick = "myFacebookLogin()" -->
         </div>
-      </div>
-      </div>
+        </div>
+        </div>
+        <!-- <div id="loggedin">
+        <a href="{% url 'social:begin' 'facebook' %}?next=/main/">Click to redirect to App-QandA from facebook</a>
+        </div> -->
+        
+        {% endif %}
+        
+        
+ <!--        <div class="fb-login-button" data-max-rows="3" data-size="large" data-show-faces="false" data-auto-logout-link="false"></div> -->
+      
+      
+      {% endblock %}
 
 
     <br><br>

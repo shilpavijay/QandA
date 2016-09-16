@@ -14,7 +14,7 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
 		
     		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.15.0/lodash.js"></script>
-		
+		 
 		<script src="{% static "js/answer.js" %}"></script>	
 		<script type="text/javascript"></script>
 
@@ -103,7 +103,7 @@
     </div>
 	
 <!-- modal -->
-<div class="bd-example">
+<div id="modal" class="bd-example">
   <!-- <a data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Answer</a> -->
   <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -123,8 +123,9 @@
             </div>          
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Save</button>
-          <button id="written_ans" type="button" class="btn btn-primary" data-dismiss="modal">Submit</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
+          <!-- <button data-dismiss="modal" aria-label="Close" id="written_ans" type="button" class="btn btn-primary button">Submit
+          </button> -->
         </div>
         </form>
       </div>
