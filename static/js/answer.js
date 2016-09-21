@@ -1,33 +1,3 @@
-// function searchlogic() {
-//   $("select").change(function() {
-//       var filter = $(this).val();
-//       console.log(filter);
-//       $("h4").each(function() {         
-//           var s = $(this).text().toLowerCase();     
-//           console.log(s); 
-//           if ($(this).text().search(new RegExp(filter, "i")) < 0) {
-//                 // $(this).fadeOut();
-//               // Need to revisit the fadeOut() after impl feed(): should be $(this).parent().fadeOut()
-//             } else {
-//                 // $(this).show();
-
-//             }         
-//     });
-//   });
-// }
-
-// function search() {
-  // var options = [];
-//     $("h4").each(function() { options.push($(this).text())});
-//   if ($(".selector").length > 0){
-//   $(".selector").select2({
-//     data: options,
-//     placeholder: {id: 0, text: "Ask Qanda"},
-//     allowClear: true
-//      });
-//     }
-// }
-
 
 function feed() {
   
@@ -80,7 +50,7 @@ function readans() {
         cl = $(this).attr("class").slice(-1);
         cldot = ".".concat(cl)
         // q = $("h4"+cl).text();
-        $(".contenthead"+cldot).attr("href",cl+'/');
+        $(".contenthead"+cldot).attr("href",'/main/'+cl+'/');
     });
 }
 
@@ -110,6 +80,7 @@ function writeans() {
         success: function(data){ 
           $("#answer-text").val("");
           $("#modal .close").click()
+          auto_load();
                 }
           });
   }
@@ -117,6 +88,15 @@ function writeans() {
   });  
 }
 
+function auto_load(){
+        $.ajax({
+          url: "/answer/",
+          cache: false,
+          success: function(data){
+             $("body").html(data);
+          } 
+        });
+}
 
 
 $("document").ready(function(){

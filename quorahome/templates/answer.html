@@ -24,10 +24,10 @@
     <hr class="hozfrst" color="#b92b27">
 	<div class="container">
       <div class="rowsize" >
-         <div class="col-md-1">
-         	<p class="title"> Qand </p>
+         <div class="col-md-2">
+          <a id="atitle" href="/main/"><p class="title"> Qanda </p></a>
          </div>
-      	 <div class="col-md-5">
+         <div class="col-md-5">
           <div class="ask_bar">
         <!-- <select class="js-example-basic-single selector"> -->
         <!-- <select class="selector"></select> -->
@@ -41,20 +41,32 @@
          </div>
          <a class="imgtag" href="/main/">
          <div class="col-md-1">
-         <img id = "read" class="image" src="{% static "img/readfile.png" %}">Read
+         <img class="image" src="{% static "img/readfile.png" %}">Read
          </div></a>
+         <!-- change href on deployment -->
          <a class="imgtag" href="#">
          <div class="col-md-11">
-         <img id="answer" class="image" src="{% static "img/pencil.png" %}">Answer
+         <img class="image" src="{% static "img/pencil.png" %}">Answer
          </div></a>
-         <a class="imgtag" href="#">
+         <!-- <a class="imgtag" href="#">
          <div class="col-md-12">
          <img class="image" src="{% static "img/bell1.png" %}">Notifications
-         </div></a>
-         <a class="imgtag" href="#">
-         <div class="col-md-2">
-         <img class="image" src="{% static "img/batman2.png" %}">Batman
-         </div></a>
+         </div></a> -->
+         <!-- <a class="imgtag" href="#"> -->
+         <div class="col-md-2"> 
+         <div class="dropdown">
+         <!-- <img class="image" src="{% static "img/batman2.png" %}">{{ request.user.username }} -->
+        <button id="mainnamebutton" class="dropdown-toggle" type="button" data-toggle="dropdown">
+    <a class="imgtag" href="#"><img class="image" src="{% static "img/batman2.png" %}">
+        {{ request.user.username }}
+      <span class="caret"></span></button>
+      <ul class="dropdown-menu">
+        <li><a href="/user/{{ request.user.username }}/">Profile</a></li>
+        <li><a onclick="FaceebookLogout()" href="{% url "django.contrib.auth.views.logout" %}?next=/">Logout</a></li>
+      </ul>
+      </a>
+      </div>
+         </div>
       </div> 
 	<hr class="hozline" color="#ddd">
 	     <div id="bdy" class="rowsize">
@@ -123,7 +135,7 @@
             </div>          
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Submit</button>
           <!-- <button data-dismiss="modal" aria-label="Close" id="written_ans" type="button" class="btn btn-primary button">Submit
           </button> -->
         </div>

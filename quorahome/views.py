@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from collections  import OrderedDict,defaultdict
 from django.utils import timezone
 import json
+from pprint import pprint
 
 # Create your views here.
 @csrf_exempt
@@ -20,24 +21,23 @@ def mainpg(request):
 @login_required(login_url='/')
 def upvote(request):
 	if request.method == 'POST' and request.is_ajax:
-		vote = request.POST.get("clicked",False)
 		answer = request.POST.get("ans",False)
-		ansObj=Answer.objects.filter(ans__startswith=answer)
-		vote = ansObj[0].upvote + 1
-		Answer.objects.filter(ans__startswith=answer).update(upvote=vote)
+		ansObj=Answer.objects.get(ans__startswith=answer)
+		num = int(ansObj.upvote + 1)
+		ansObj.upvote=num
+		ansObj.save()
 	return HttpResponse("pass")
 
-
+@csrf_exempt
+@login_required(login_url='/')
 def downvote(request):
 	if request.method == 'POST' and request.is_ajax:
-		vote = request.POST.get("clicked",False)
-		answer = request.POST.get("ans",False)
-		print vote,answer
-		ansObj=Answer.objects.filter(ans__startswith=answer)
-		vote = ansObj[0].upvote - 1
-		print vote
-		a=Answer.objects.filter(ans__startswith=answer).update(upvote=vote)
-		print a
+		answ = request.POST.get("answer",False)
+		ansOb=Answer.objects.get(ans__startswith=answ)
+		num = int(ansOb.upvote - 1)
+		print num
+		ansOb.upvote=num
+		ansOb.save()
 	return HttpResponse("pass")	
 
 
@@ -53,6 +53,39 @@ def qasked(request):
 	newQ.date = timezone.now()
 	newQ.save()
 	return HttpResponse("pass")
+
+@csrf_exempt
+@login_required(login_url='/')
+def commentadd(request):
+	print 'inside'
+	if request.method == 'POST' and request.is_ajax:
+		answer = request.POST.get("forans",False)
+		comnt = request.POST.get("commentwritten",False)
+		# comnt = pprint(comnt)
+		# print pprint(comnt)
+		print answer
+		answ = Answer.objects.get(ans__startswith=answer)
+		print answ
+		newc = Comment()
+		newc.username = request.user
+		newc.com = comnt
+		newc.answer = answ
+		newc.upvote = 0
+		newc.date = timezone.now()
+		newc.save()
+		print 'done'
+	return HttpResponse("pass")
+
+
+def getComments(request,ans):
+	comret = defaultdict()
+	answer=ans
+	ansObj = Answer.objects.get(ans__startswith=ans)
+	comments = Comment.objects.filter(answer=ansObj).order_by('date')
+	for c in comments:
+		comret[c.date.strftime('%d-%m-%Y %H:%M')]=[c.username.username,c.com]
+
+	return HttpResponse(json.dumps(sorted(comret.items())))
 
 @csrf_exempt
 def signup(request):
@@ -97,6 +130,7 @@ def anspg_count(request):
 	return HttpResponse(json.dumps(anspg))
 
 def user(request,username):
+	print request.session.session_key
 	return render(request,'user.html')
 
 class OrderedDefaultDict(OrderedDict):
@@ -196,6 +230,7 @@ def ulogin(request):
 			print("User is valid and authenticated")
 			login(request,auth)
 			print("login done returning...")
+			print request.session.session_key
 			return HttpResponse("pass")
 		else:
 			logout(request)

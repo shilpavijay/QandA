@@ -1,30 +1,9 @@
 
-// function search() {
-//   $("select").change(function() {
-//       var filter = $(this).val();
-//       console.log(filter);
-//       $("h4").each(function() {         
-//           var s = $(this).text().toLowerCase();     
-//           console.log(s); 
-//           if ($(this).text().search(new RegExp(filter, "i")) < 0) {
-//                 // $(this).fadeOut();
-
-//               // Need to revisit the fadeOut() after impl feed(): should be $(this).parent().fadeOut()
-//             } else {
-//                 // $(this).show();
-
-//             }         
-//     });
-//   });
-// }
-
 function feed() {
-  
-  // var start = _.template('<div class="qna">');
   var feed_q = _.template('<a class="viewq"><h4 class="<%= c %>"> <%= q %> </h4><br/></a>');
   var pic_user = _.template('<a class="info" href="#" color="#333"><img class="image" src= <%=i %> > Batman</a>');
   var feed_ans = _.template('<br/><p class="answers <%= c %>"><%= a %> </p><br/>');
-  var vote_bar = _.template('<div class="ActionBar"><a class="upvote <%= c %>"><span>Upvote |  </span><span><%= v %></span></a><a class="downvote <%= c %>">Downvote</a><a class="downvote">Comments</a><p class="time"><%= t %></p></div><br/>');
+  var vote_bar = _.template('<div class="ActionBar"><button class="upvote <%= c %>"><span>Upvote |  </span><span><%= v %></span></button><button class="downvote <%= c %>">Downvote</button><button class="comments <%= c %>" data-toggle="modal" data-target="#commentsModal" data-whatever="@mdo">Comments</button><p class="time"><%= t %></p></div><br/>');
   var line = _.template('<div class="separator"></div>');
   $.get("/feed/",function(data){
     json = JSON.parse(data);
@@ -45,60 +24,78 @@ function feed() {
 }
 
 function upvote_click() {
-    $(".qa").one('click','.upvote',function(){
-      var cl,q;    
-      cl = $(this).attr("class").slice(-1);
-      cl = ".".concat(cl)
+
+    $(".qa").on('click','.upvote',function(){     
+    
+      var cli,q;    
+      cli = $(this).attr("class").slice(-1);                                                
+      cl = ".".concat(cli)
       q = $("p"+cl).text().slice(0,80);
-      $.ajax({
-        type: "POST",
-        url: "/upvote/",
-        data: 
-        { 
-          clicked: 'yes',
-          ans: q
-        },
-        success: function(data){ 
+      q = q.trimLeft().trimRight();
+       if (localStorage.upvote === cl) {
+            $(".upvote" + cl).attr("disabled",true);
+        } 
+        else {
+            $(this).attr("disabled",false);      
+          $.ajax({
+            type: "POST",
+            url: "/upvote/",
+            data: 
+            { 
+              clicked: 'yes',
+              ans: q
+            },
+            success: function(data){ 
               var uptext = $(".upvote" + cl).text();
               var upcount = parseInt(uptext.slice(-3));
               ++upcount;
-              // alert(uptext.slice(0,-3) + upcount);
               $(".upvote" + cl).text(uptext.slice(0,-3) + ' ' +upcount);
-                }
-          });
-  });
+              $(".upvote" + cl).attr("disabled",true);
+              localStorage.setItem("upvote",cl)
+                       }
+        });
+    }
+      });
+    
 }
 
 function downvote_click() {
-    $(".qa").one('click','.downvote',function(){
+    $(".qa").on('click','.downvote',function(event){
+      $(this).attr("disabled",false);          
       var cl,q;    
       cl = $(this).attr("class").slice(-1);
       cl = ".".concat(cl)
       q = $("p"+cl).text().slice(0,80);
-      $.ajax({
-        type: "POST",
-        url: "/downvote/",
-        data: 
-        { 
-          clicked: 'yes',
-          ans: q
-        },
-        success: function(data){ 
-              // setTimeout(feed,10);
+      q = q.trimLeft().trimRight();
+      if (localStorage.downvote === cl) {
+            $(".downvote" + cl).attr("disabled",true);
+        } 
+        else {
+          $(this).attr("disabled",false);
+          $.ajax({
+            type: "POST",
+            url: "/downvote/",
+            data: 
+            { 
+              click: 'yes',
+              answer: q
+            },
+            success: function(data){
               var uptext = $(".upvote" + cl).text();
               var upcount = parseInt(uptext.slice(-3));
               upcount = upcount-1;
-              // alert(uptext.slice(0,-3) + upcount);
               $(".upvote" + cl).text(uptext.slice(0,-3) + ' ' +upcount);
+              $(".downvote" + cl).attr("disabled",true);
+              localStorage.setItem("downvote",cl)
                 }
           });
+        }
   });
 }
 
 
 function ask() {
-    $("#askbutton").click(function(event){
-      
+    $("#askbutton").click(function(event){    
       if($("#askquestionhere").val().length===0){
         event.preventDefault();
       }
@@ -177,18 +174,64 @@ function readansmore() {
   });
 }
 
+function comment() { 
+  $(".qa").on('click','.comments',function(){ 
+      var cl,q;  
+      var com = _.template('<div class="commentname"><%= name %>:</div><span class="comentext"><%= text %></span>');
+      cli = $(this).attr("class").slice(-1);
+      cl = ".".concat(cli)
+      ans = $(".answers"+cl).text().slice(0,60);
+      ans = ans.trimRight().trimLeft();
+      // index = cli + 1
+      $.get("/get_comments/"+ans+'/',function(data){
+          json = JSON.parse(data);
+
+          $("#commenttext").empty();
+          $.each(json, function(date,detail){       
+            $("#commenttext").append(com({ 'name': detail[1][0], 'text': detail[1][1] }));          
+          });
+        
+        });  
+  });
+
+    $(".btn").click(function(event){
+    if($(".form-control").val().length===0){
+      event.preventDefault();
+    }
+    else {
+      console.log(ans+$("#comment-text").val());
+      $.ajax({
+        type: "POST",
+        url: "/addcomment/",
+        data: 
+        { 
+          csrfmiddlewaretoken: "{{ csrf_token }}", 
+          forans: ans,
+          commentwritten : $("#comment-text").val()
+        },
+        success: function(data){ 
+          $("#comment-text").val("");
+          $("#commentsmodal .close").click()
+                }
+          });
+  }
+  return false;
+  });  
+}
+
 
 
 
 $("document").ready(function(){
   
   feed();
-  setTimeout(wrapfeed,100);
-  setTimeout(upvote_click,100);
-  setTimeout(downvote_click,100);
+  setTimeout(wrapfeed,5);
+  setTimeout(upvote_click,1);
+  setTimeout(downvote_click,1);
   ask();
   readans();
   readansmore();
+  comment();
 
 
   
@@ -217,3 +260,4 @@ $("document").ready(function(){
   // search();
 
 });
+

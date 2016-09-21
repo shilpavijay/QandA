@@ -23,7 +23,16 @@ body {
 .title {
 	color: #b92b27;
 	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-    font: 2.4em solid;
+    font: 27px solid;
+    cursor: pointer;
+    margin-top: 8px;
+    text-decoration: none;
+    margin-left: 45px
+}
+
+.title a:hover{
+ text-decoration: white;
+ cursor: pointer;
 }
 
 .inputarea {
@@ -87,6 +96,7 @@ body {
 
 h4 {
     font-weight: bold;
+    cursor: pointer;
 }
 
 .image1 {
@@ -243,6 +253,25 @@ h4 {
     float: left;
 }
 
+.upvdone {
+    -webkit-user-select: none;
+    box-sizing: border-box;
+    transition: opacity ease-in-out 100ms,color ease-in-out 100ms,background-color ease-in-out 100ms,border-color ease-in-out 100ms;
+    border-radius: 3px;
+    box-shadow: 0 1px 1px 0 rgba(200,200,200,0.2);
+    display: inline-block;
+    font-weight: 500;
+    outline: 0;
+    padding: 3px 7px 4px 7px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    background: #f1f8fb;
+    color: #2b6dad;
+    border: 1px solid #bbcadc;
+    float: left;
+}
+
 .downvote{
     margin-bottom: 4px;
     transition: opacity ease-in-out 100ms,color ease-in-out 100ms,background-color ease-in-out 100ms,border-color ease-in-out 100ms;
@@ -252,7 +281,21 @@ h4 {
     color: #999;
     float: left;
     cursor: pointer;
-    text-align: justify-all;
+    background-color: #ffffff;
+    border: none;
+}
+
+.comments{
+    margin-bottom: 4px;
+    transition: opacity ease-in-out 100ms,color ease-in-out 100ms,background-color ease-in-out 100ms,border-color ease-in-out 100ms;
+    padding: 3px 7px 4px 7px;
+    text-align: center;
+    font-weight: 500;
+    color: #999;
+    float: left;
+    cursor: pointer;
+    background-color: #ffffff;
+    border: none;
 }
 
 .time {
@@ -335,18 +378,15 @@ li {
     background-color: "white";
 }
 
-/*Facebook Connect Button*/
-.fb_box .fb_block a{
-color:#ff00ff; /*font color*/
-background:#ffff00; /*button color*/
-border: solid 1px #000000; /* border color, size, and line style */
-font-family: arial, sans-serif; /* font-family determines the web-safe font used for the button name */
-font-size: 14px; /* size of the text in the Facebook Connect Button */
-border-radius: 3px; /* creates rounded corners, for a more button-like look.  The larger the number, the more rounded the corners.  If you don’t want rounded corners, change the border-radius to 0px */
-padding:5px; /* amount of space between the text and the border of the button */
+a:hover {
+    text-decoration: none; 
 }
 
-/*Facebook Connect Button Hover*/
-.fb_box .fb_block a:hover{
-background:#dd0000; /* background color of the Facebook Connect Button when you hover over it */
+.commentname {
+    font-size: 16px;
+    font-style: italic;
+}
+
+.commentext {
+    font-size: 15px;
 }

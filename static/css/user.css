@@ -21,9 +21,18 @@ body {
 }
 
 .title {
-	color: #b92b27;
-	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-    font: 2.4em solid;
+    color: #b92b27;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font: 27px solid;
+    cursor: pointer;
+    margin-top: 8px;
+    text-decoration: none;
+    margin-left: 45px
+}
+
+.title a:hover{
+ text-decoration: white;
+ cursor: pointer;
 }
 
 .time {
@@ -99,6 +108,7 @@ body {
 
 h4 {
     font-weight: bold;
+    cursor: pointer;
 }
 
 .image1 {
@@ -261,7 +271,8 @@ h4 {
     color: #999;
     float: left;
     cursor: pointer;
-    text-align: justify-all;
+    background-color: #ffffff;
+    border: none;
 }
 
 .feededit{
@@ -369,4 +380,30 @@ ul {
     width: 150px;
     border-radius: 75px;
 
+}
+
+a:hover {
+    text-decoration: none; 
+}
+
+.commentname {
+    font-size: 16px;
+    font-style: italic;
+}
+
+.commentext {
+    font-size: 15px;
+}
+
+.comments{
+    margin-bottom: 4px;
+    transition: opacity ease-in-out 100ms,color ease-in-out 100ms,background-color ease-in-out 100ms,border-color ease-in-out 100ms;
+    padding: 3px 7px 4px 7px;
+    text-align: center;
+    font-weight: 500;
+    color: #999;
+    float: left;
+    cursor: pointer;
+    background-color: #ffffff;
+    border: none;
 }

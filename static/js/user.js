@@ -4,7 +4,7 @@ function feedans() {
   var feed_q = _.template('<a class="viewq"><h4 class="<%= c %>"> <%= q %> </h4><br/></a>');
   var pic_user = _.template('<a class="info" href="#" color="#333"><img class="image" src= <%=i %> > Batman</a>');
   var feed_ans = _.template('<br/><p class="answers <%= c %>"><%= a %> </p><br/>');
-  var vote_bar = _.template('<div class="ActionBar"><a class="upvote <%= c %>"><span>Upvote |  </span><span><%= v %></span></a><a class="downvote">Downvote</a><a class="downvote <%= c %>">Comments</a><p class="time"><%= t %></p></div><br/>');
+  var vote_bar = _.template('<div class="ActionBar"><a class="upvote <%= c %>"><span>Upvote |  </span><span><%= v %></span></a><button class="downvote <%= c %>">Downvote</button><button class="comments <%= c %>" data-toggle="modal" data-target="#commentsModal" data-whatever="@mdo">Comments</button><p class="time"><%= t %></p></div><br/>');
   var line = _.template('<div class="separator"></div>');
   $.get("/userans/"+username+'/',function(data){
     json = JSON.parse(data);
@@ -15,7 +15,7 @@ function feedans() {
       $.each(answers,function(ans,info){    
           $(".qa").append(pic_user({ 'i': profpic }));
           $(".qa").append(feed_ans({ 'c': idcount, 'a' : ans }));
-          $(".qa").append(vote_bar({ 'c': idcount, 'v': info[0], 't': info[1]}));
+          $(".qa").append(vote_bar({ 'c': idcount, 'v': info[0],'t': info[1] }));
           $(".qa").append(line());
           idcount = idcount + 1;
       });    
@@ -23,6 +23,18 @@ function feedans() {
     });
   });   
   return true; 
+}
+
+function auto_load(){
+    var username = window.location.href;
+    username = username.split('/')[4];
+        $.ajax({
+          url: "/user/"+username+"/",
+          cache: false,
+          success: function(data){
+             $("body").html(data);
+          } 
+        });
 }
 
 function feed() {
@@ -129,27 +141,72 @@ function readansmore() {
 }
 
 function upvote_click() {
-    $(".qa").one('click','.upvote',function(){
+
+    $(".qa").on('click','.upvote',function(){     
+         
+      var cli,q;    
+      cli = $(this).attr("class").slice(-1);                                                
+      cl = ".".concat(cli)
+      q = $("p"+cl).text().slice(0,80);
+      q = q.trimLeft().trimRight();
+       if (localStorage.upvote === cl) {
+            $(".upvote" + cl).attr("disabled",true);
+        } 
+        else {
+            $(this).attr("disabled",false);      
+          $.ajax({
+            type: "POST",
+            url: "/upvote/",
+            data: 
+            { 
+              clicked: 'yes',
+              ans: q
+            },
+            success: function(data){ 
+              var uptext = $(".upvote" + cl).text();
+              var upcount = parseInt(uptext.slice(-3));
+              ++upcount;
+              $(".upvote" + cl).text(uptext.slice(0,-3) + ' ' +upcount);
+              $(".upvote" + cl).attr("disabled",true);
+              localStorage.setItem("upvote",cl)
+                       }
+        });
+    }
+      });
+    
+}
+
+function downvote_click() {
+    $(".qa").on('click','.downvote',function(event){
+      $(this).attr("disabled",false);          
       var cl,q;    
       cl = $(this).attr("class").slice(-1);
       cl = ".".concat(cl)
       q = $("p"+cl).text().slice(0,80);
-      $.ajax({
-        type: "POST",
-        url: "/upvote/",
-        data: 
-        { 
-          clicked: 'yes',
-          ans: q
-        },
-        success: function(data){ 
+      q = q.trimLeft().trimRight();
+      if (localStorage.downvote === cl) {
+            $(".downvote" + cl).attr("disabled",true);
+        } 
+        else {
+          $(this).attr("disabled",false);
+          $.ajax({
+            type: "POST",
+            url: "/downvote/",
+            data: 
+            { 
+              click: 'yes',
+              answer: q
+            },
+            success: function(data){
               var uptext = $(".upvote" + cl).text();
               var upcount = parseInt(uptext.slice(-3));
-              ++upcount;
-              // alert(uptext.slice(0,-3) + upcount);
+              upcount = upcount-1;
               $(".upvote" + cl).text(uptext.slice(0,-3) + ' ' +upcount);
+              $(".downvote" + cl).attr("disabled",true);
+              localStorage.setItem("downvote",cl)
                 }
           });
+        }
   });
 }
 
@@ -170,31 +227,7 @@ function clicksidebar() {
 
 }
 
-function downvote_click() {
-    $(".qa").one('click','.downvote',function(){
-      var cl,q;    
-      cl = $(this).attr("class").slice(-1);
-      cl = ".".concat(cl)
-      q = $("p"+cl).text().slice(0,80);
-      $.ajax({
-        type: "POST",
-        url: "/downvote/",
-        data: 
-        { 
-          clicked: 'yes',
-          ans: q
-        },
-        success: function(data){ 
-              // setTimeout(feed,10);
-              var uptext = $(".upvote" + cl).text();
-              var upcount = parseInt(uptext.slice(-3));
-              upcount = upcount-1;
-              // alert(uptext.slice(0,-3) + upcount);
-              $(".upvote" + cl).text(uptext.slice(0,-3) + ' ' +upcount);
-                }
-          });
-  });
-}
+
 
 function writeans() {
   $(".qa").on('click','.upvote',function(){ 
@@ -222,6 +255,54 @@ function writeans() {
         success: function(data){ 
           $("#answer-text").val("");
           $("#modal .close").click()
+          auto_load();
+                }
+          });
+  }
+  return false;
+  });  
+}
+
+function comment() { 
+  $(".qa").on('click','.comments',function(){ 
+      var cl,q;  
+      var com = _.template('<div class="commentname"><%= name %>:</div><span class="comentext"><%= text %></span>');
+      cli = $(this).attr("class").slice(-1);
+      cl = ".".concat(cli)
+      ans = $(".answers"+cl).text().slice(0,60);
+      ans = ans.trimRight().trimLeft();
+      // index = cli + 1
+      $.get("/get_comments/"+ans+'/',function(data){
+          json = JSON.parse(data);
+
+          $("#commenttext").empty();
+          $.each(json, function(date,detail){       
+            $("#commenttext").append(com({ 'name': detail[1][0], 'text': detail[1][1] }));          
+          });
+        
+        });  
+  });
+
+    $(".btn").click(function(event){
+    if($(".form-control").val().length===0){
+      event.preventDefault();
+
+    }
+    else {
+       alert('clicked');
+      console.log(ans+$("#comment-text").val());
+      $.ajax({
+        type: "POST",
+        url: "/addcomment/",
+        data: 
+        { 
+          csrfmiddlewaretoken: "{{ csrf_token }}", 
+          forans: ans,
+          commentwritten : $("#comment-text").val()
+        },
+        success: function(data){ 
+          $("#comment-text").val("");
+          $("#commentsmodal .close").click()
                 }
           });
   }
@@ -230,19 +311,22 @@ function writeans() {
 }
 
 
+
+
 $("document").ready(function(){
   var username = window.location.href;
   username = username.split('/')[4];
   $("#username").text(username);
-  setTimeout(feedans,100);
-  setTimeout(wrapfeed,100);
-  setTimeout(upvote_click,100);
-  setTimeout(downvote_click,100);
+  setTimeout(feedans,10);
+  setTimeout(wrapfeed,10);
+  setTimeout(upvote_click,10);
+  setTimeout(downvote_click,10);
   ask();
   readans();
   readansmore();
   clicksidebar();
   setTimeout(writeans,10);
+  comment();
 
 
 });

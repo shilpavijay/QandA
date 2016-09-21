@@ -22,6 +22,10 @@ function myFacebookLogin() {
   }, {scope: 'publish_actions'});
 } 
 
+function FaceebookLogout() {
+  FB.logout();
+}
+
 
 
 $("document").ready(function(){

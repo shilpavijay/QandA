@@ -15,13 +15,14 @@ urlpatterns = [
 	url(r'^feed/$',feed), 			#feed details - main page
 	url(r'^users/folusers/$', foll_users),#used for following other users (admin purpose) 
 	url(r'^users/$', user_list), 	#renders page - list of users to follow
-	url(r'^answer/[0-9]+/$', qonlypg), 
 	url(r'^main/[0-9]+/$', qonlypg), 
 	url(r'^ajaxcall/(?P<question>[0-9]+)/$', ret_ans), 
 	url(r'^askq/$',qasked),
 	url(r'^signup/$',signup),
-	url(r'^logout/$', logout_view), # URL for logout
+	url(r'^logout/$', 'django.contrib.auth.views.logout'),
 	url(r'^user/(?P<username>.*)/$', user),
 	url(r'^userq/(?P<username>.*)/$', userquestion),
 	url(r'^userans/(?P<username>.*)/$', userans),
+	url(r'^addcomment/$',commentadd),
+	url(r'^get_comments/(?P<ans>.*)/$',getComments),
 	]

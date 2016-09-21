@@ -2,30 +2,42 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
+from django.conf import settings
+import taggit.managers
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
+        ('taggit', '0002_auto_20150616_2121'),
+        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Answers',
+            name='Ans_Com',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Answer',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('ans', models.CharField(max_length=1000)),
-                ('category', models.CharField(max_length=50)),
-                ('upvote', models.IntegerField()),
+                ('upvote', models.IntegerField(default=0)),
                 ('date', models.DateTimeField(verbose_name=b'date published')),
             ],
         ),
         migrations.CreateModel(
-            name='Comments',
+            name='Comment',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('upvote', models.IntegerField()),
+                ('comment', models.CharField(max_length=1000)),
+                ('upvote', models.IntegerField(default=0)),
                 ('date', models.DateTimeField(verbose_name=b'date published')),
+                ('answer', models.ForeignKey(to='quorahome.Answer')),
+                ('username', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.CreateModel(
@@ -33,7 +45,10 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('qion', models.CharField(max_length=1000)),
+                ('category', models.CharField(max_length=50, null=True)),
                 ('date', models.DateTimeField(verbose_name=b'date published')),
+                ('tags', taggit.managers.TaggableManager(to='taggit.Tag', through='taggit.TaggedItem', blank=True, help_text='A comma-separated list of tags.', verbose_name='Tags')),
+                ('username', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.CreateModel(
@@ -42,48 +57,30 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('following', models.CharField(max_length=50, null=True)),
                 ('followers', models.CharField(max_length=50, null=True)),
+                ('username', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.CreateModel(
-            name='User',
+            name='UserProfile',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('specialization', models.CharField(max_length=200)),
+                ('user', models.OneToOneField(to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.AddField(
-            model_name='relship',
-            name='username',
-            field=models.ForeignKey(to='quorahome.User'),
-        ),
-        migrations.AddField(
-            model_name='question',
-            name='username',
-            field=models.ForeignKey(to='quorahome.User'),
-        ),
-        migrations.AddField(
-            model_name='comments',
-            name='comment',
-            field=models.ForeignKey(to='quorahome.Question'),
-        ),
-        migrations.AddField(
-            model_name='comments',
-            name='username',
-            field=models.ForeignKey(to='quorahome.User'),
-        ),
-        migrations.AddField(
-            model_name='answers',
-            name='comment',
-            field=models.ForeignKey(to='quorahome.Comments'),
-        ),
-        migrations.AddField(
-            model_name='answers',
+            model_name='answer',
             name='qion',
             field=models.ForeignKey(to='quorahome.Question'),
         ),
         migrations.AddField(
-            model_name='answers',
+            model_name='answer',
             name='username',
-            field=models.ForeignKey(to='quorahome.User'),
+            field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
+        ),
+        migrations.AddField(
+            model_name='ans_com',
+            name='ans',
+            field=models.ForeignKey(to='quorahome.Answer'),
         ),
     ]
