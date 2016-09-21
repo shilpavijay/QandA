@@ -106,6 +106,12 @@ body {
     /*display: flex;*/
 } 
 
+.pic {
+    padding: 0px 0.5px 0px 0px;
+    height: 21px;
+    width: 21px;
+} 
+
 h4 {
     font-weight: bold;
     cursor: pointer;

@@ -2,7 +2,7 @@ function feedans() {
   var username = window.location.href;
   username = username.split('/')[4];
   var feed_q = _.template('<a class="viewq"><h4 class="<%= c %>"> <%= q %> </h4><br/></a>');
-  var pic_user = _.template('<a class="info" href="#" color="#333"><img class="image" src= <%=i %> > Batman</a>');
+  var pic_user = _.template('<a class="info" href="/user/<%=user %>/" color="#333"><img class="pic" src= <%=i %>> <%=user %> </a>');
   var feed_ans = _.template('<br/><p class="answers <%= c %>"><%= a %> </p><br/>');
   var vote_bar = _.template('<div class="ActionBar"><a class="upvote <%= c %>"><span>Upvote |  </span><span><%= v %></span></a><button class="downvote <%= c %>">Downvote</button><button class="comments <%= c %>" data-toggle="modal" data-target="#commentsModal" data-whatever="@mdo">Comments</button><p class="time"><%= t %></p></div><br/>');
   var line = _.template('<div class="separator"></div>');
@@ -13,7 +13,7 @@ function feedans() {
       $(".qa").append(feed_q({ 'c': idcount,'q': question }));
     
       $.each(answers,function(ans,info){    
-          $(".qa").append(pic_user({ 'i': profpic }));
+          $(".qa").append(pic_user({ 'i': profpic, 'user': info[2] }));
           $(".qa").append(feed_ans({ 'c': idcount, 'a' : ans }));
           $(".qa").append(vote_bar({ 'c': idcount, 'v': info[0],'t': info[1] }));
           $(".qa").append(line());
@@ -41,7 +41,7 @@ function feed() {
   var username = window.location.href;
   username = username.split('/')[4];
   var content_head = _.template('<div class="contenthead">Question asked . India . 22m</div> ')
-  var feed_q = _.template('<h4 class=" <%= c %>"><%= q %></h4>');
+  var feed_q = _.template('<h4 href="#" class=" <%= c %>"><a class=" <%= c %> "><%= q %></a></h4>');
   var feed_ans = _.template('<br/><a class="contenthead <%= c %>">Read <%= a %> Answers </a><br/>');
   var ans_bar = _.template('<div class="ActionBar"><a class="upvote <%= c %>" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo"><span class="clickans">Answer</span><a class="downvote">Pass</a><br/></div><br/>');
   var line = _.template('<div class="separator"></div>');
@@ -82,7 +82,7 @@ function ask() {
   });  
 }
 
-function readans() {
+function readansq() {
       $(".qa").on('click','.viewq',function(){
         var id;    
         var qtext = $(this).text();
@@ -93,10 +93,31 @@ function readans() {
             quest=quest.trimLeft().trimRight()
             if ( quest == qtext) {
                id = idcount[0];
-               window.location.href = id + '/';
+               window.location.href = '/main/' + id + '/';
             }
            });
     });
+  });
+}
+
+function readans() {
+      $(".qa").on('click','.contenthead',function(){
+        var cl,q;    
+        cl = $(this).attr("class").slice(-2);
+        cl = parseInt(cl);
+        cldot = ".".concat(cl);
+        $(".contenthead"+cldot).attr("href",'/main/'+cl+'/');
+    });
+}
+
+
+function qclick_read() {
+    $(".qa").on('click','h4',function(){
+      var cl,q;    
+      cl = $(this).attr("class").slice(-2);
+      cl = parseInt(cl);
+      cldot = ".".concat(cl)
+      $("a"+cldot).attr("href",'/main/'+cl+'/');
   });
 }
 
@@ -115,7 +136,9 @@ function wrapfeed() {
       more = _.template('<br><br><a class="m <%= id %>">(more)</a>');
     }
     $(this).text(result); 
-    $(this).append(more({ 'id':$(this).attr("Class").slice(-1) })); 
+    var data = $(this).attr("Class").slice(-2);
+    data = parseInt(data);
+    $(this).append(more({ 'id':data }));
   });
 
 }
@@ -123,7 +146,8 @@ function wrapfeed() {
 function readansmore() {
   $(".qa").on('click','.m',function(){
         var id,cl,qtext;    
-        cl = $(this).attr("class").slice(-1);
+        cl = $(this).attr("class").slice(-2);
+        cl = parseInt(cl);
         cl = ".".concat(cl)
         qtext = $("h4"+cl).text();
         qtext = qtext.trimLeft().trimRight();
@@ -145,7 +169,8 @@ function upvote_click() {
     $(".qa").on('click','.upvote',function(){     
          
       var cli,q;    
-      cli = $(this).attr("class").slice(-1);                                                
+      cli = $(this).attr("class").slice(-2);
+      cli = parseInt(cli);                                                
       cl = ".".concat(cli)
       q = $("p"+cl).text().slice(0,80);
       q = q.trimLeft().trimRight();
@@ -180,7 +205,8 @@ function downvote_click() {
     $(".qa").on('click','.downvote',function(event){
       $(this).attr("disabled",false);          
       var cl,q;    
-      cl = $(this).attr("class").slice(-1);
+      cl = $(this).attr("class").slice(-2);
+      cl = parseInt(cl);
       cl = ".".concat(cl)
       q = $("p"+cl).text().slice(0,80);
       q = q.trimLeft().trimRight();
@@ -232,7 +258,8 @@ function clicksidebar() {
 function writeans() {
   $(".qa").on('click','.upvote',function(){ 
       var cl,q;    
-      cl = $(this).attr("class").slice(-1);
+      cl = $(this).attr("class").slice(-2);
+      cl = parseInt(cl);
       cl = ".".concat(cl)
       q = $("h4"+cl).text();
       $("#modaltitle").text(q);
@@ -267,7 +294,8 @@ function comment() {
   $(".qa").on('click','.comments',function(){ 
       var cl,q;  
       var com = _.template('<div class="commentname"><%= name %>:</div><span class="comentext"><%= text %></span>');
-      cli = $(this).attr("class").slice(-1);
+      cli = $(this).attr("class").slice(-2);
+      cli = parseInt(cli);
       cl = ".".concat(cli)
       ans = $(".answers"+cl).text().slice(0,60);
       ans = ans.trimRight().trimLeft();
@@ -302,7 +330,8 @@ function comment() {
         },
         success: function(data){ 
           $("#comment-text").val("");
-          $("#commentsmodal .close").click()
+          $("#commentsmodal .close").click();
+          $(document.body).html(data);
                 }
           });
   }
@@ -323,10 +352,12 @@ $("document").ready(function(){
   setTimeout(downvote_click,10);
   ask();
   readans();
+  readansq();
   readansmore();
   clicksidebar();
   setTimeout(writeans,10);
   comment();
+  qclick_read();
 
 
 });

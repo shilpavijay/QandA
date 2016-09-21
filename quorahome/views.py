@@ -115,11 +115,6 @@ def answer(request):
 		newAns.date = timezone.now()
 		newAns.save()
 	return render_to_response('answer.html', context_instance=RequestContext(request))
-
-# @csrf_exempt
-# def content(request):
-
-# 	return HttpResponse("pass") 
  
 def anspg_count(request):
 	anspg = defaultdict()
@@ -151,10 +146,10 @@ def feed(request):
 	for a in ansO:
 		q = Question.objects.get(qion = a.qion.qion)
 		if q.qion not in qanda.keys():
-			qanda[q.qion]={a.ans:[a.upvote,a.date.strftime('%d-%m-%Y %H:%M')]}
+			qanda[q.qion]={a.ans:[a.upvote,a.date.strftime('%d-%m-%Y %H:%M'),a.username.username]}
 		else:
 			if a.upvote > qanda[q.qion].values():
-				qanda[q.qion]={a.ans:[a.upvote,a.date.strftime('%d-%m-%Y %H:%M')]}
+				qanda[q.qion]={a.ans:[a.username,a.upvote,a.date.strftime('%d-%m-%Y %H:%M'),a.username.username]}
 	return HttpResponse(json.dumps(OrderedDict(qanda.items())))
 
 def userans(request,username):
@@ -165,9 +160,9 @@ def userans(request,username):
 	for a in answers:
 		qObj = Question.objects.get(qion = a.qion.qion)
 		if qObj.qion not in qanda.keys():
-			qanda[qObj.qion]={a.ans:[a.upvote,a.date.strftime('%d-%m-%Y %H:%M')]}
+			qanda[qObj.qion]={a.ans:[a.upvote,a.date.strftime('%d-%m-%Y %H:%M'),a.username.username]}
 		else:
-			qanda[qObj.qion].update({a.ans:[a.upvote,a.date.strftime('%d-%m-%Y %H:%M')]})
+			qanda[qObj.qion].update({a.ans:[a.upvote,a.date.strftime('%d-%m-%Y %H:%M'),a.username.username]})
 	return HttpResponse(json.dumps(OrderedDict(qanda.items())))
 
 def userquestion(request,username):
@@ -249,9 +244,9 @@ def ret_ans(request,question):
 	for a in ansO:
 		q = Question.objects.get(qion = a.qion.qion)
 		if qObj.qion not in qanda.keys():
-			qanda[qObj.qion]={a.ans:[a.upvote,a.date.strftime('%d-%m-%Y %H:%M')]}
+			qanda[qObj.qion]={a.ans:[a.upvote,a.date.strftime('%d-%m-%Y %H:%M'),a.username.username]}
 		else:
-			qanda[qObj.qion].update({a.ans:[a.upvote,a.date.strftime('%d-%m-%Y %H:%M')]})
+			qanda[qObj.qion].update({a.ans:[a.upvote,a.date.strftime('%d-%m-%Y %H:%M'),a.username.username]})
 	return HttpResponse(json.dumps(OrderedDict(qanda.items())))
 
 def qonlypg(request):

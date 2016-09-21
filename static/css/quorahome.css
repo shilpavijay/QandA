@@ -89,9 +89,12 @@ body {
 	padding: 0px 0.5px 0px 0px;
 	height: 35px;
 	width: 30px;
-    /*-webkit-justify-content: space-around;*/
-    /*justify-content: flex-end;*/
-    /*display: flex;*/
+} 
+
+.pic {
+    padding: 0px 0.5px 0px 0px;
+    height: 21px;
+    width: 21px;
 } 
 
 h4 {
@@ -187,6 +190,7 @@ h4 {
     font-size: 13px;
     padding: 0 0 0 0;
     text-align: justify-all;
+    cursor: pointer;
 }
 
 .sidebar {

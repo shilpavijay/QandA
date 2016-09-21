@@ -26,20 +26,20 @@ function ask() {
 
 function feed() {
   var feed_q = _.template('<h4> <%= q %> </h4><br/>');
-  var pic_user = _.template('<a class="info" href="#" color="#333"><img class="image" src= <%=i %> > Batman</a>');
+  var pic_user = _.template('<a class="info" href="/user/<%=user %>/" color="#333"><img class="pic" src= <%=i %>> <%=user %> </a>');
   var feed_ans = _.template('<br/><p class="answers <%= c %>"><%= a %> </p><br/>');
   var vote_bar = _.template('<div class="ActionBar"><a class="upvote <%= c %>"><span>Upvote |  </span><span><%= v %></span></a><button class="downvote <%= c %>">Downvote</button><button class="comments <%= c %>" data-toggle="modal" data-target="#commentsModal" data-whatever="@mdo">Comments</button><p class="time"><%= t %></p></div><br/>');
   var line = _.template('<div class="separator"></div>');
-  var pg = window.location.href
-  pg=pg.slice(-2,-1) + '/';
-  $.get("/ajaxcall/" + pg,function(data){
+  var pg = window.location.href.split('/')
+  pg=pg[4];
+  $.get("/ajaxcall/" + pg+'/',function(data){
     json = JSON.parse(data);
     var idcount = 0;
     $.each(json, function(question,answers){     
       $(".qa").append(feed_q({ 'q': question }));
     
       $.each(answers,function(ans,info){    
-          $(".qa").append(pic_user({ 'i': profpic }));
+          $(".qa").append(pic_user({ 'i': profpic, 'user': info[2] }));
           $(".qa").append(feed_ans({ 'c': idcount, 'a' : ans }));
           $(".qa").append(vote_bar({ 'c': idcount, 'v': info[0],'t': info[1] }));
           $(".qa").append(line());
@@ -57,8 +57,9 @@ function upvote_click() {
     $(".qa").on('click','.upvote',function(){     
          
       var cli,q;    
-      cli = $(this).attr("class").slice(-1);                                                
-      cl = ".".concat(cli)
+      cli = $(this).attr("class").slice(-2);   
+      cli = parseInt(cli);                                             
+      cl = ".".concat(cli);
       q = $("p"+cl).text().slice(0,80);
       q = q.trimLeft().trimRight();
        if (localStorage.upvote === cl) {
@@ -92,8 +93,9 @@ function downvote_click() {
     $(".qa").on('click','.downvote',function(event){
       $(this).attr("disabled",false);          
       var cl,q;    
-      cl = $(this).attr("class").slice(-1);
-      cl = ".".concat(cl)
+      cl = $(this).attr("class").slice(-2);
+      cl = parseInt(cl);
+      cl = ".".concat(cl);
       q = $("p"+cl).text().slice(0,80);
       q = q.trimLeft().trimRight();
       if (localStorage.downvote === cl) {
@@ -126,8 +128,9 @@ function comment() {
   $(".qa").on('click','.comments',function(){ 
       var cl,q;  
       var com = _.template('<div class="commentname"><%= name %>:</div><span class="comentext"><%= text %></span>');
-      cli = $(this).attr("class").slice(-1);
-      cl = ".".concat(cli)
+      cli = $(this).attr("class").slice(-2);
+      cli = parseInt(cli);
+      cl = ".".concat(cli);
       ans = $(".answers"+cl).text().slice(0,60);
       ans = ans.trimRight().trimLeft();
       // index = cli + 1
